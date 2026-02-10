@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Dashboard — Tesem Admin</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="admin-body">
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <div class="admin-layout">
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__header">
+        <h2>Tesem Admin</h2>
+        <span>School Management</span>
+      </div>
+
+      <nav class="sidebar__nav" aria-label="Admin navigation">
+        <p class="sidebar__nav-label">Overview</p>
+        <a href="#" class="sidebar__link active" data-section="dashboard">
+          <span class="sidebar__link-icon">📊</span> Dashboard
+        </a>
+
+        <p class="sidebar__nav-label">Content</p>
+        <a href="#" class="sidebar__link" data-section="announcements">
+          <span class="sidebar__link-icon">📢</span> Announcements
+        </a>
+        <a href="#" class="sidebar__link" data-section="gallery">
+          <span class="sidebar__link-icon">🖼️</span> Gallery
+        </a>
+
+        <p class="sidebar__nav-label">Settings</p>
+        <a href="#" class="sidebar__link" data-section="settings">
+          <span class="sidebar__link-icon">⚙️</span> Site Settings
+        </a>
+      </nav>
+
+      <div class="sidebar__footer">
+        <button class="sidebar__logout" id="logoutBtn">
+          🚪 Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="admin-main">
+      <!-- Top Bar -->
+      <div class="admin-topbar">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+          <div class="admin-topbar__title">
+            <h1 id="pageTitle">Dashboard</h1>
+            <p id="pageSubtitle">Welcome back, Admin</p>
+          </div>
+        </div>
+        <div class="admin-topbar__user">
+          <span id="adminEmail">admin</span>
+          <div class="admin-topbar__avatar" id="adminAvatar">A</div>
+        </div>
+      </div>
+
+      <div class="admin-content">
+
+        <!-- ========== DASHBOARD SECTION ========== -->
+        <section class="admin-section active" id="sec-dashboard">
+          <!-- Stats -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-card__icon">📢</div>
+              <div class="stat-card__label">Announcements</div>
+              <div class="stat-card__value" id="statAnnouncements">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon">🖼️</div>
+              <div class="stat-card__label">Gallery Images</div>
+              <div class="stat-card__value" id="statGallery">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon">📝</div>
+              <div class="stat-card__label">Published</div>
+              <div class="stat-card__value" id="statPublished">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon">🎓</div>
+              <div class="stat-card__label">Admission Status</div>
+              <div class="stat-card__value" id="statAdmission">—</div>
+            </div>
+          </div>
+
+          <!-- Recent Announcements Preview -->
+          <div class="panel">
+            <div class="panel__header">
+              <h2>Recent Announcements</h2>
+            </div>
+            <div class="panel__body">
+              <div id="recentAnnouncements" class="page-loader">
+                <div class="loading-spinner"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== ANNOUNCEMENTS SECTION ========== -->
+        <section class="admin-section" id="sec-announcements">
+          <div class="panel">
+            <div class="panel__header">
+              <h2>All Announcements</h2>
+              <button class="admin-btn admin-btn--primary" id="addAnnouncementBtn">
+                ➕ New Announcement
+              </button>
+            </div>
+            <div class="panel__body">
+              <div id="announcementsTable" class="page-loader">
+                <div class="loading-spinner"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== GALLERY SECTION ========== -->
+        <section class="admin-section" id="sec-gallery">
+          <div class="panel">
+            <div class="panel__header">
+              <h2>Image Gallery</h2>
+            </div>
+            <div class="panel__body">
+              <!-- Upload Area -->
+              <div class="upload-area" id="uploadArea">
+                <div class="upload-area__icon">📤</div>
+                <p>Click to upload an image or drag &amp; drop</p>
+                <p style="font-size:.75rem;color:#9ca3af;margin-top:4px;">JPG, PNG, WebP — Max 5MB</p>
+                <input type="file" id="galleryFileInput" accept="image/jpeg,image/png,image/webp" />
+              </div>
+
+              <!-- Category select for upload -->
+              <div style="margin-bottom:20px;">
+                <label for="uploadCategory" style="font-size:.82rem;font-weight:500;">Category:</label>
+                <select id="uploadCategory" style="padding:8px 12px;border:1px solid var(--admin-border);border-radius:6px;font-family:Poppins,sans-serif;font-size:.85rem;margin-left:8px;">
+                  <option value="campus">Campus</option>
+                  <option value="events">Events</option>
+                  <option value="activities">Activities</option>
+                  <option value="graduation">Graduation</option>
+                </select>
+              </div>
+
+              <div id="galleryGrid" class="gallery-grid"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== SETTINGS SECTION ========== -->
+        <section class="admin-section" id="sec-settings">
+          <div class="panel">
+            <div class="panel__header">
+              <h2>Site Settings</h2>
+            </div>
+            <div class="panel__body">
+              <form class="admin-form" id="settingsForm">
+                <!-- Admission Toggle -->
+                <div class="form-group">
+                  <label>Admission Status</label>
+                  <div class="toggle-switch">
+                    <input type="checkbox" id="admissionToggle" class="toggle-switch__input" />
+                    <label for="admissionToggle" class="toggle-switch__slider"></label>
+                    <span class="toggle-switch__label" id="admissionLabel">Closed</span>
+                  </div>
+                </div>
+
+                <!-- Resumption Date -->
+                <div class="form-group">
+                  <label for="resumptionDate">Next Resumption Date</label>
+                  <input type="date" id="resumptionDate" />
+                </div>
+
+                <button type="submit" class="admin-btn admin-btn--primary">
+                  💾 Save Settings
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- / admin-content -->
+    </main>
+  </div><!-- / admin-layout -->
+
+  <!-- ===== ANNOUNCEMENT MODAL ===== -->
+  <div class="modal-overlay" id="announcementModal">
+    <div class="modal">
+      <div class="modal__header">
+        <h3 id="modalTitle">New Announcement</h3>
+        <button class="modal__close" id="modalClose">✕</button>
+      </div>
+      <div class="modal__body">
+        <form class="admin-form" id="announcementForm" novalidate>
+          <input type="hidden" id="announcementId" />
+
+          <div class="form-group">
+            <label for="annTitle">Title</label>
+            <input type="text" id="annTitle" placeholder="Announcement title" required />
+          </div>
+
+          <div class="form-group">
+            <label for="annType">Type</label>
+            <select id="annType" required>
+              <option value="">Select type…</option>
+              <option value="admission">Admission</option>
+              <option value="employment">Employment</option>
+              <option value="activities">Activities</option>
+              <option value="term_closure">Term Closure</option>
+              <option value="resumption">Resumption</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="annContent">Content</label>
+            <textarea id="annContent" rows="5" placeholder="Write the announcement content…" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="annPublished" style="margin-right:6px;" />
+              Publish immediately
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal__footer">
+        <button class="admin-btn admin-btn--outline" id="modalCancel">Cancel</button>
+        <button class="admin-btn admin-btn--primary" id="modalSave">💾 Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Scripts -->
+  <script src="js/supabase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
