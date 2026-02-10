@@ -40,26 +40,45 @@
     </nav>
   </header>
 
-  <!-- ===== HERO SECTION ===== -->
-  <section class="hero">
-    <div class="hero__overlay" aria-hidden="true"></div>
-    <div class="container hero__content">
-      <span class="hero__badge">📚 Excellence in Education Since 2005</span>
-      <h1 class="hero__title">
-        Building Tomorrow's<br />
-        <span class="highlight">Leaders</span> Today
-      </h1>
-      <p class="hero__motto">Developing Potentials</p>
-      <p class="hero__subtitle">
-        Tesem Model Schools provides a nurturing environment where every child
-        is inspired to learn, grow, and achieve academic excellence grounded in
-        strong moral values.
-      </p>
-      <div class="hero__buttons">
-        <a href="admissions.html" class="btn btn--primary">Enroll Now</a>
-        <a href="about.html" class="btn btn--outline">Learn More</a>
+  <!-- ===== HERO CAROUSEL ===== -->
+  <section class="hero-carousel" id="heroCarousel" aria-label="Hero announcements carousel">
+    <div class="hero-carousel__track">
+      
+      <!-- Slide 1 — Default Hero (always first) -->
+      <div class="hero-carousel__slide hero-carousel__slide--default active" aria-label="Welcome slide">
+        <div class="hero__overlay" aria-hidden="true"></div>
+        <div class="container hero__content">
+          <span class="hero__badge">📚 Excellence in Education Since 2012</span>
+          <h1 class="hero__title">
+            Building Tomorrow's<br />
+            <span class="highlight">Leaders</span> Today
+          </h1>
+          <p class="hero__motto">Developing Potentials</p>
+          <p class="hero__subtitle">
+            Tesem Model Schools provides a nurturing environment where every child
+            is inspired to learn, grow, and achieve academic excellence grounded in
+            strong moral values.
+          </p>
+          <div class="hero__buttons">
+            <a href="admissions.html" class="btn btn--primary">Enroll Now</a>
+            <a href="about.html" class="btn btn--outline">Learn More</a>
+          </div>
+        </div>
       </div>
+      <!-- Dynamic announcement slides injected here by JS -->
+
     </div>
+
+    <!-- Carousel Navigation Arrows -->
+    <button class="hero-carousel__arrow hero-carousel__arrow--prev" id="carouselPrev" aria-label="Previous slide">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="hero-carousel__arrow hero-carousel__arrow--next" id="carouselNext" aria-label="Next slide">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <!-- Carousel Dots -->
+    <div class="hero-carousel__dots" id="carouselDots" aria-label="Carousel navigation"></div>
   </section>
 
   <!-- ===== INTRODUCTION ===== -->
@@ -120,7 +139,7 @@
           <p>
             Building strong academic foundations with a balanced curriculum
             covering literacy, numeracy, sciences, and creative arts for
-            pupils in Primary 1 through 6.
+            pupils in Basic 1 through 6.
           </p>
         </article>
 
@@ -264,5 +283,10 @@
 
   <!-- JavaScript -->
   <script src="js/main.js"></script>
+
+  <!-- Supabase CDN (for fetching announcements) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Hero Carousel -->
+  <script src="js/hero-carousel.js"></script>
 </body>
 </html>

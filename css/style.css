@@ -291,16 +291,205 @@ button {
 }
 
 /* ============================================================
-   HERO SECTION
+   HERO SECTION / CAROUSEL
    ============================================================ */
-.hero {
+
+/* ---------- Carousel Container ---------- */
+.hero-carousel {
   margin-top: 78px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: var(--white);
   position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+.hero-carousel__track {
+  display: flex;
+  transition: transform 0.7s cubic-bezier(0.45, 0, 0.15, 1);
+  will-change: transform;
+}
+
+/* ---------- Individual Slide ---------- */
+.hero-carousel__slide {
+  min-width: 100%;
+  flex-shrink: 0;
+  position: relative;
+  color: var(--white);
   overflow: hidden;
 }
 
+/* Default hero slide — uses brand gradient */
+.hero-carousel__slide--default {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+/* Text-only announcement slide — uses brand gradient */
+.hero-carousel__slide--text {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+/* Image announcement slide — no gradient, uses uploaded image */
+.hero-carousel__slide--image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #1b1022;
+}
+
+/* Dark overlay for image slides (legibility) */
+.hero-carousel__slide--image .hero-carousel__img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(27, 16, 34, .58) 0%, rgba(27, 16, 34, .72) 100%);
+  z-index: 1;
+}
+
+/* ---------- Slide Content ---------- */
+.hero-carousel__slide .hero__content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Announcement slide content layout */
+.hero-carousel__ann-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 100px 0 110px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.hero-carousel__ann-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, .15);
+  color: var(--white);
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: .78rem;
+  font-weight: 500;
+  letter-spacing: .5px;
+  margin-bottom: 22px;
+  text-transform: capitalize;
+  backdrop-filter: blur(4px);
+}
+
+.hero-carousel__ann-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  max-width: 750px;
+  text-shadow: 0 2px 12px rgba(0,0,0,.18);
+}
+
+.hero-carousel__ann-text {
+  font-size: 1.1rem;
+  font-weight: 300;
+  opacity: .92;
+  max-width: 620px;
+  margin-bottom: 32px;
+  line-height: 1.75;
+}
+
+.hero-carousel__ann-date {
+  font-size: .78rem;
+  opacity: .65;
+  font-weight: 400;
+  letter-spacing: .4px;
+}
+
+/* ---------- Navigation Arrows ---------- */
+.hero-carousel__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(255, 255, 255, .15);
+  border: 2px solid rgba(255, 255, 255, .25);
+  color: var(--white);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+}
+
+.hero-carousel:hover .hero-carousel__arrow {
+  opacity: 1;
+}
+
+.hero-carousel__arrow:hover {
+  background: rgba(255, 255, 255, .3);
+  border-color: rgba(255, 255, 255, .5);
+}
+
+.hero-carousel__arrow--prev { left: 20px; }
+.hero-carousel__arrow--next { right: 20px; }
+
+/* Hide arrows completely when only 1 slide */
+.hero-carousel--single .hero-carousel__arrow,
+.hero-carousel--single .hero-carousel__dots {
+  display: none;
+}
+
+/* ---------- Carousel Dots ---------- */
+.hero-carousel__dots {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.hero-carousel__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .35);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition);
+  padding: 0;
+}
+
+.hero-carousel__dot.active {
+  background: var(--white);
+  transform: scale(1.25);
+  box-shadow: 0 0 8px rgba(255, 255, 255, .5);
+}
+
+.hero-carousel__dot:hover:not(.active) {
+  background: rgba(255, 255, 255, .6);
+}
+
+/* ---------- Slide Entry Animations ---------- */
+.hero-carousel__slide .hero__content,
+.hero-carousel__slide .hero-carousel__ann-content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .6s ease .3s, transform .6s ease .3s;
+}
+
+.hero-carousel__slide.active .hero__content,
+.hero-carousel__slide.active .hero-carousel__ann-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Default Slide Inner Styles ---------- */
 .hero__overlay {
   position: absolute;
   inset: 0;
@@ -1211,11 +1400,13 @@ button {
     display: flex;
   }
 
-  .hero__title {
+  .hero__title,
+  .hero-carousel__ann-title {
     font-size: 2.2rem;
   }
 
-  .hero__content {
+  .hero__content,
+  .hero-carousel__ann-content {
     padding: 60px 0 80px;
   }
 
@@ -1281,11 +1472,13 @@ button {
 
 /* Mobile — 480px */
 @media (max-width: 480px) {
-  .hero__title {
+  .hero__title,
+  .hero-carousel__ann-title {
     font-size: 1.8rem;
   }
 
-  .hero__subtitle {
+  .hero__subtitle,
+  .hero-carousel__ann-text {
     font-size: 1rem;
   }
 
@@ -1298,6 +1491,24 @@ button {
   .hero__buttons .btn {
     width: 100%;
     text-align: center;
+  }
+
+  .hero-carousel__arrow {
+    width: 36px;
+    height: 36px;
+    opacity: 1;
+  }
+
+  .hero-carousel__arrow--prev { left: 10px; }
+  .hero-carousel__arrow--next { right: 10px; }
+
+  .hero-carousel__dots {
+    bottom: 18px;
+  }
+
+  .hero-carousel__dot {
+    width: 8px;
+    height: 8px;
   }
 
   .btn {

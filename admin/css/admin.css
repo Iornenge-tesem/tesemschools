@@ -701,6 +701,66 @@ button {
 }
 
 /* ============================================================
+   ANNOUNCEMENT IMAGE UPLOAD (inside modal)
+   ============================================================ */
+.ann-image-upload {
+  border: 2px dashed var(--admin-border);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .25s ease;
+}
+
+.ann-image-upload:hover {
+  border-color: var(--admin-primary);
+}
+
+.ann-image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.ann-image-preview {
+  position: relative;
+}
+
+.ann-image-preview img {
+  display: block;
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.ann-image-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(220, 38, 38, .85);
+  color: #fff;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background .2s;
+}
+
+.ann-image-remove:hover {
+  background: #dc2626;
+}
+
+/* ============================================================
    TOGGLE SWITCH
    ============================================================ */
 .toggle-switch {

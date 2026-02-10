@@ -153,6 +153,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Reset form
     if (announcementForm) announcementForm.reset();
     document.getElementById('announcementId').value = '';
+    document.getElementById('annImageUrl').value    = '';
+    resetImagePreview();
 
     if (data) {
       // Edit mode
@@ -162,11 +164,103 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('annType').value        = data.type || '';
       document.getElementById('annContent').value     = data.content || '';
       document.getElementById('annPublished').checked  = data.is_published || false;
+
+      // Show existing image if any
+      if (data.image_url) {
+        document.getElementById('annImageUrl').value = data.image_url;
+        showImagePreview(data.image_url);
+      }
     } else {
       modalTitle.textContent = 'New Announcement';
     }
 
     announcementModal.classList.add('show');
+  }
+
+  /* --- Announcement Image Upload Helpers --- */
+  var annImageInput      = document.getElementById('annImage');
+  var annImageUploadArea = document.getElementById('annImageUploadArea');
+  var annImagePreview    = document.getElementById('annImagePreview');
+  var annImagePreviewImg = document.getElementById('annImagePreviewImg');
+  var annImagePlaceholder = document.getElementById('annImagePlaceholder');
+  var annImageRemoveBtn  = document.getElementById('annImageRemove');
+
+  // Click to browse
+  if (annImagePlaceholder) {
+    annImagePlaceholder.addEventListener('click', function () {
+      if (annImageInput) annImageInput.click();
+    });
+  }
+
+  // File selected
+  if (annImageInput) {
+    annImageInput.addEventListener('change', function () {
+      if (annImageInput.files && annImageInput.files[0]) {
+        handleAnnImageUpload(annImageInput.files[0]);
+      }
+    });
+  }
+
+  // Remove image
+  if (annImageRemoveBtn) {
+    annImageRemoveBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var currentUrl = document.getElementById('annImageUrl').value;
+      if (currentUrl) {
+        // Delete from storage
+        var fileName = currentUrl.split('/').pop();
+        if (fileName) {
+          supabase.storage.from('announcements').remove([fileName]).catch(function () {});
+        }
+      }
+      document.getElementById('annImageUrl').value = '';
+      if (annImageInput) annImageInput.value = '';
+      resetImagePreview();
+    });
+  }
+
+  async function handleAnnImageUpload(file) {
+    var allowed = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowed.includes(file.type)) {
+      showToast('Only JPG, PNG, and WebP images are allowed.', 'warning');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('Image must be under 5MB.', 'warning');
+      return;
+    }
+
+    var fileName = Date.now() + '_' + file.name.replace(/\s+/g, '_');
+
+    try {
+      showToast('Uploading image…', 'warning');
+      var uploadResult = await supabase.storage
+        .from('announcements')
+        .upload(fileName, file, { cacheControl: '3600', upsert: false });
+
+      if (uploadResult.error) throw uploadResult.error;
+
+      var urlResult = supabase.storage.from('announcements').getPublicUrl(fileName);
+      var publicUrl = urlResult.data.publicUrl;
+
+      document.getElementById('annImageUrl').value = publicUrl;
+      showImagePreview(publicUrl);
+      showToast('Image uploaded!');
+    } catch (err) {
+      showToast(err.message || 'Image upload failed.', 'error');
+    }
+  }
+
+  function showImagePreview(url) {
+    if (annImagePreviewImg) annImagePreviewImg.src = url;
+    if (annImagePreview) annImagePreview.style.display = 'block';
+    if (annImagePlaceholder) annImagePlaceholder.style.display = 'none';
+  }
+
+  function resetImagePreview() {
+    if (annImagePreviewImg) annImagePreviewImg.src = '';
+    if (annImagePreview) annImagePreview.style.display = 'none';
+    if (annImagePlaceholder) annImagePlaceholder.style.display = '';
   }
 
   function closeAnnouncementModal() {
@@ -181,6 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const type        = document.getElementById('annType').value;
       const content     = document.getElementById('annContent').value.trim();
       const isPublished = document.getElementById('annPublished').checked;
+      const imageUrl    = document.getElementById('annImageUrl').value || null;
 
       // Validation
       if (!title || !type || !content) {
@@ -196,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // UPDATE existing announcement
           const { error } = await supabase
             .from('announcements')
-            .update({ title, type, content, is_published: isPublished, updated_at: new Date().toISOString() })
+            .update({ title, type, content, is_published: isPublished, image_url: imageUrl, updated_at: new Date().toISOString() })
             .eq('id', id);
 
           if (error) throw error;
@@ -205,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // INSERT new announcement
           const { error } = await supabase
             .from('announcements')
-            .insert([{ title, type, content, is_published: isPublished }]);
+            .insert([{ title, type, content, is_published: isPublished, image_url: imageUrl }]);
 
           if (error) throw error;
           showToast('Announcement created successfully.');
