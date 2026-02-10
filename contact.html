@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contact Tesem Model Schools — address, phone, email, contact form, and map location." />
+  <title>Contact Us — Tesem Model Schools</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER / NAVIGATION ===== -->
+  <header class="header" id="header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a href="index.html" class="nav__logo">
+        <div class="nav__logo-icon" aria-hidden="true">TM</div>
+        <div class="nav__logo-text">
+          Tesem Model Schools
+          <span>Nursery &bull; Primary &bull; Secondary</span>
+        </div>
+      </a>
+
+      <ul class="nav__links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="academics.html">Academics</a></li>
+        <li><a href="admissions.html">Admissions</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+        <li><a href="admissions.html" class="btn btn--primary nav__cta">Enroll Now</a></li>
+      </ul>
+
+      <button class="nav__toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>Contact Us</h1>
+      <p>We'd love to hear from you — reach out with any questions or visit our campus</p>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT SECTION ===== -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <h2>Get In Touch</h2>
+        <p>Have questions about admissions, academics, or anything else? Send us a message or visit our office.</p>
+        <div class="accent-line"></div>
+      </div>
+
+      <div class="contact__grid">
+
+        <!-- Left: Contact Information -->
+        <div class="contact-info">
+          <!-- Address -->
+          <div class="contact-info__item">
+            <div class="contact-info__icon" aria-hidden="true">📍</div>
+            <div class="contact-info__text">
+              <h4>School Address</h4>
+              <p>12 Education Avenue, Ikeja,<br />Lagos State, Nigeria</p>
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <div class="contact-info__item">
+            <div class="contact-info__icon" aria-hidden="true">📞</div>
+            <div class="contact-info__text">
+              <h4>Phone Numbers</h4>
+              <p>
+                <a href="tel:+2348012345678">+234 801 234 5678</a><br />
+                <a href="tel:+2349098765432">+234 909 876 5432</a>
+              </p>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="contact-info__item">
+            <div class="contact-info__icon" aria-hidden="true">✉️</div>
+            <div class="contact-info__text">
+              <h4>Email Address</h4>
+              <p>
+                <a href="mailto:info@tesemmodelschools.com">info@tesemmodelschools.com</a><br />
+                <a href="mailto:admissions@tesemmodelschools.com">admissions@tesemmodelschools.com</a>
+              </p>
+            </div>
+          </div>
+
+          <!-- Office Hours -->
+          <div class="contact-info__item">
+            <div class="contact-info__icon" aria-hidden="true">🕐</div>
+            <div class="contact-info__text">
+              <h4>Office Hours</h4>
+              <p>
+                Monday – Friday: 7:30 AM – 4:00 PM<br />
+                Saturday: 9:00 AM – 1:00 PM (Admissions only)
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Contact Form -->
+        <form class="contact-form" id="contactForm" novalidate>
+          <!-- Success Message -->
+          <div class="form-success" id="formSuccess">
+            ✅ Thank you! Your message has been sent successfully. We'll get back to you shortly.
+          </div>
+
+          <!-- Full Name -->
+          <div class="form-group">
+            <label for="fullName">Full Name <span aria-hidden="true">*</span></label>
+            <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required />
+            <p class="error-message" aria-live="polite"></p>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email">Email Address <span aria-hidden="true">*</span></label>
+            <input type="email" id="email" name="email" placeholder="Enter your email address" required />
+            <p class="error-message" aria-live="polite"></p>
+          </div>
+
+          <!-- Phone -->
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="e.g. +234 801 234 5678" />
+            <p class="error-message" aria-live="polite"></p>
+          </div>
+
+          <!-- Subject -->
+          <div class="form-group">
+            <label for="subject">Subject <span aria-hidden="true">*</span></label>
+            <input type="text" id="subject" name="subject" placeholder="What is your enquiry about?" required />
+            <p class="error-message" aria-live="polite"></p>
+          </div>
+
+          <!-- Message -->
+          <div class="form-group">
+            <label for="message">Message <span aria-hidden="true">*</span></label>
+            <textarea id="message" name="message" rows="5" placeholder="Type your message here..." required></textarea>
+            <p class="error-message" aria-live="polite"></p>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" class="btn btn--primary" style="width:100%; text-align:center;">
+            Send Message
+          </button>
+        </form>
+
+      </div>
+
+      <!-- Map Placeholder -->
+      <div class="map-placeholder" aria-label="Map location placeholder">
+        🗺️ Embedded Map Placeholder — Replace with Google Maps iframe
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <h3>Tesem Model Schools</h3>
+          <p>
+            A reputable institution dedicated to raising leaders of tomorrow
+            through quality education, discipline, and moral values.
+          </p>
+          <div class="footer__social">
+            <a href="#" aria-label="Facebook">📘</a>
+            <a href="#" aria-label="Instagram">📸</a>
+            <a href="#" aria-label="Twitter / X">🐦</a>
+          </div>
+        </div>
+
+        <div class="footer__col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="academics.html">Academics</a></li>
+            <li><a href="admissions.html">Admissions</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4>Our Schools</h4>
+          <ul>
+            <li><a href="academics.html">Nursery School</a></li>
+            <li><a href="academics.html">Primary School</a></li>
+            <li><a href="academics.html">Secondary School</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4>Contact Us</h4>
+          <ul>
+            <li>📍 Lagos, Nigeria</li>
+            <li>📞 +234 801 234 5678</li>
+            <li>✉️ info@tesemmodelschools.com</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        &copy; 2026 Tesem Model Schools. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
