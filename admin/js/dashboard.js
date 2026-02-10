@@ -6,15 +6,29 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  // Ensure supabase is loaded
+  if (typeof supabase === 'undefined' || !supabase) {
+    alert('Failed to initialize. Please refresh the page.');
+    window.location.href = 'login.html';
+    return;
+  }
+
   /* ==========================================================
      SESSION CHECK — Redirect to login if not authenticated
      ========================================================== */
   async function checkAuth() {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error) {
+        console.error('Auth check error:', error);
+        window.location.href = 'login.html';
+        return;
+      }
       
       if (!session) {
         // Not authenticated, redirect to login
+        console.log('Not authenticated, redirecting to login...');
         window.location.href = 'login.html';
         return;
       }
