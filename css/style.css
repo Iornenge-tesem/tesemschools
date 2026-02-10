@@ -42,6 +42,7 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  overflow-x: hidden;
 }
 
 body {
@@ -50,6 +51,8 @@ body {
   background: var(--white);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 a {
@@ -299,7 +302,9 @@ button {
   margin-top: 78px;
   position: relative;
   overflow: hidden;
+  overflow-x: hidden;
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  width: 100%;
 }
 
 .hero-carousel__track {
@@ -392,7 +397,7 @@ button {
   font-weight: 300;
   opacity: .92;
   max-width: 620px;
-  margin-bottom: 32px;
+  margin: 0 auto 32px;
   line-height: 1.75;
 }
 
@@ -1402,12 +1407,35 @@ button {
 
   .hero__title,
   .hero-carousel__ann-title {
-    font-size: 2.2rem;
+    font-size: 2rem;
+    line-height: 1.25;
   }
 
   .hero__content,
   .hero-carousel__ann-content {
-    padding: 60px 0 80px;
+    padding: 50px 0 70px;
+  }
+
+  .hero-carousel__ann-content {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .hero-carousel__ann-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .hero-carousel__ann-badge {
+    font-size: .75rem;
+    padding: 5px 14px;
+    margin-bottom: 16px;
+  }
+
+  .hero__subtitle {
+    font-size: 1rem;
+    line-height: 1.6;
   }
 
   .intro__grid,
@@ -1470,45 +1498,133 @@ button {
   }
 }
 
-/* Mobile — 480px */
-@media (max-width: 480px) {
+/* Large Mobile — 600px */
+@media (max-width: 600px) {
   .hero__title,
   .hero-carousel__ann-title {
-    font-size: 1.8rem;
+    font-size: 1.65rem;
+    line-height: 1.3;
   }
 
   .hero__subtitle,
   .hero-carousel__ann-text {
-    font-size: 1rem;
+    font-size: .95rem;
+    line-height: 1.6;
+  }
+
+  .hero__content {
+    padding: 45px 18px 65px;
+  }
+
+  .hero-carousel__ann-content {
+    padding: 50px 18px 70px;
+  }
+
+  .hero__buttons {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .hero-carousel__arrow {
+    width: 38px;
+    height: 38px;
+  }
+
+  .hero-carousel__dots {
+    bottom: 16px;
+  }
+}
+
+/* Mobile — 480px */
+@media (max-width: 480px) {
+  .hero__title,
+  .hero-carousel__ann-title {
+    font-size: 1.4rem;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    padding: 0 8px;
+  }
+
+  .hero__subtitle,
+  .hero-carousel__ann-text {
+    font-size: .88rem;
+    line-height: 1.6;
+    margin-bottom: 18px;
+    padding: 0 4px;
+  }
+
+  .hero__content {
+    padding: 40px 16px 60px;
+  }
+
+  .hero-carousel__ann-content {
+    padding: 45px 16px 65px;
+    max-width: 100%;
+  }
+
+  .hero-carousel__ann-badge {
+    font-size: .68rem;
+    padding: 4px 14px;
+    margin-bottom: 10px;
+  }
+
+  .hero-carousel__ann-date {
+    font-size: .68rem;
+    margin-top: 6px;
+  }
+
+  .hero__motto {
+    font-size: .82rem;
+    margin-bottom: 8px;
+  }
+
+  .hero__badge {
+    font-size: .68rem;
+    padding: 4px 14px;
+    margin-bottom: 10px;
   }
 
   .hero__buttons {
     flex-direction: column;
     width: 100%;
-    padding: 0 20px;
+    max-width: 100%;
+    padding: 0;
+    gap: 10px;
   }
 
   .hero__buttons .btn {
     width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
     text-align: center;
+    padding: 11px 20px;
+    font-size: .85rem;
   }
 
   .hero-carousel__arrow {
     width: 36px;
     height: 36px;
     opacity: 1;
+    background: rgba(255, 255, 255, .25);
+    border: 1.5px solid rgba(255, 255, 255, .4);
+  }
+
+  .hero-carousel__arrow svg {
+    width: 16px;
+    height: 16px;
   }
 
   .hero-carousel__arrow--prev { left: 10px; }
   .hero-carousel__arrow--next { right: 10px; }
 
   .hero-carousel__dots {
-    bottom: 18px;
+    bottom: 14px;
+    gap: 7px;
   }
 
   .hero-carousel__dot {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
   }
 
   .btn {
@@ -1530,6 +1646,85 @@ button {
 
   .page-hero h1 {
     font-size: 1.8rem;
+  }
+}
+
+/* Extra Small Mobile — 360px and below */
+@media (max-width: 360px) {
+  .hero__title,
+  .hero-carousel__ann-title {
+    font-size: 1.25rem;
+    line-height: 1.35;
+    margin-bottom: 10px;
+    padding: 0 6px;
+  }
+
+  .hero__subtitle,
+  .hero-carousel__ann-text {
+    font-size: .82rem;
+    line-height: 1.55;
+    margin-bottom: 14px;
+    padding: 0 2px;
+  }
+
+  .hero__content {
+    padding: 35px 12px 55px;
+  }
+
+  .hero-carousel__ann-content {
+    padding: 40px 12px 60px;
+    max-width: 100%;
+  }
+
+  .hero-carousel__ann-badge,
+  .hero__badge {
+    font-size: .62rem;
+    padding: 3px 12px;
+    margin-bottom: 8px;
+  }
+
+  .hero__motto {
+    font-size: .78rem;
+    margin-bottom: 6px;
+  }
+
+  .hero__buttons {
+    padding: 0;
+    gap: 8px;
+  }
+
+  .hero__buttons .btn {
+    padding: 10px 16px;
+    font-size: .8rem;
+    max-width: 260px;
+  }
+
+  .hero-carousel__arrow {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, .3);
+  }
+
+  .hero-carousel__arrow svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .hero-carousel__arrow--prev { left: 8px; }
+  .hero-carousel__arrow--next { right: 8px; }
+
+  .hero-carousel__dots {
+    bottom: 12px;
+    gap: 5px;
+  }
+
+  .hero-carousel__dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .hero-carousel__ann-date {
+    font-size: .62rem;
   }
 }
 
