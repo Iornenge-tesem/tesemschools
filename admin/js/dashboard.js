@@ -7,6 +7,30 @@ document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   /* ==========================================================
+     SESSION CHECK — Redirect to login if not authenticated
+     ========================================================== */
+  async function checkAuth() {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        // Not authenticated, redirect to login
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      // Authenticated, continue loading dashboard
+      console.log('User authenticated:', session.user.email);
+    } catch (error) {
+      console.error('Auth check error:', error);
+      window.location.href = 'login.html';
+    }
+  }
+  
+  // Run auth check immediately
+  checkAuth();
+
+  /* ==========================================================
      UTILITY: Toast Notifications
      ========================================================== */
   function showToast(message, type = 'success') {
@@ -611,6 +635,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
+  }
+
+  /* ==========================================================
+     LOGOUT HANDLER
+     ========================================================== */
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+        
+        // Redirect to login page
+        window.location.href = 'login.html';
+      } catch (error) {
+        console.error('Logout error:', error);
+        showToast('Error signing out. Please try again.', 'error');
+      }
+    });
   }
 
   /* ==========================================================
