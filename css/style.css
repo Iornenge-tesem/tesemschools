@@ -9,25 +9,25 @@
 
 /* ---------- CSS Custom Properties ---------- */
 :root {
-  --navy:        #0B1D3A;
-  --navy-light:  #132B55;
-  --navy-dark:   #060F1F;
-  --white:       #FFFFFF;
-  --off-white:   #F5F7FA;
-  --soft-green:  #2E8B57;
-  --green-light: #3BA96E;
-  --green-dark:  #236B44;
-  --text-dark:   #1A1A2E;
-  --text-muted:  #555B6E;
-  --border:      #D6DCE5;
-  --shadow-sm:   0 2px 8px rgba(11,29,58,.08);
-  --shadow-md:   0 4px 20px rgba(11,29,58,.12);
-  --shadow-lg:   0 8px 40px rgba(11,29,58,.16);
-  --radius-sm:   6px;
-  --radius-md:   10px;
-  --radius-lg:   16px;
-  --transition:  .3s ease;
-  --max-width:   1200px;
+  --primary:        #b627d8;
+  --primary-dark:   #9a1fc0;
+  --primary-light:  #d45ff0;
+  --primary-pale:   #f6f1fa;
+  --white:          #FFFFFF;
+  --bg-section:     #f6f1fa;
+  --text-primary:   #1f2933;
+  --text-secondary: #4b5563;
+  --border:         #e5e7eb;
+  --footer-bg:      #1b1022;
+  --footer-link:    #d9a6ec;
+  --shadow-sm:      0 2px 8px rgba(31,41,51,.08);
+  --shadow-md:      0 4px 20px rgba(31,41,51,.12);
+  --shadow-lg:      0 8px 40px rgba(31,41,51,.16);
+  --radius-sm:      6px;
+  --radius-md:      10px;
+  --radius-lg:      16px;
+  --transition:     .3s ease;
+  --max-width:      1200px;
 }
 
 /* ---------- Reset & Base ---------- */
@@ -46,7 +46,7 @@ html {
 
 body {
   font-family: 'Poppins', sans-serif;
-  color: var(--text-dark);
+  color: var(--text-primary);
   background: var(--white);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
@@ -84,7 +84,7 @@ button {
 }
 
 .section--gray {
-  background: var(--off-white);
+  background: var(--bg-section);
 }
 
 .section-header {
@@ -95,13 +95,13 @@ button {
 .section-header h2 {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--navy);
+  color: var(--text-primary);
   margin-bottom: 12px;
 }
 
 .section-header p {
   font-size: 1.05rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   max-width: 620px;
   margin: 0 auto;
 }
@@ -109,7 +109,7 @@ button {
 .section-header .accent-line {
   width: 60px;
   height: 4px;
-  background: var(--soft-green);
+  background: var(--primary);
   border-radius: 2px;
   margin: 16px auto 0;
 }
@@ -126,12 +126,12 @@ button {
 }
 
 .btn--primary {
-  background: var(--soft-green);
+  background: var(--primary);
   color: var(--white);
 }
 
 .btn--primary:hover {
-  background: var(--green-dark);
+  background: var(--primary-dark);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
@@ -144,16 +144,16 @@ button {
 
 .btn--outline:hover {
   background: var(--white);
-  color: var(--navy);
+  color: var(--primary);
 }
 
 .btn--navy {
-  background: var(--navy);
+  background: var(--primary);
   color: var(--white);
 }
 
 .btn--navy:hover {
-  background: var(--navy-light);
+  background: var(--primary-dark);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
@@ -192,7 +192,7 @@ button {
 .nav__logo-icon {
   width: 44px;
   height: 44px;
-  background: var(--navy);
+  background: var(--primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -206,7 +206,7 @@ button {
 .nav__logo-text {
   font-size: 1.15rem;
   font-weight: 700;
-  color: var(--navy);
+  color: var(--text-primary);
   line-height: 1.2;
 }
 
@@ -214,7 +214,7 @@ button {
   display: block;
   font-size: .7rem;
   font-weight: 400;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   letter-spacing: .5px;
 }
 
@@ -227,7 +227,7 @@ button {
 .nav__links a {
   font-size: .9rem;
   font-weight: 500;
-  color: var(--text-dark);
+  color: var(--text-primary);
   position: relative;
   padding: 4px 0;
 }
@@ -239,7 +239,7 @@ button {
   left: 0;
   width: 0;
   height: 2px;
-  background: var(--soft-green);
+  background: var(--primary);
   transition: width var(--transition);
 }
 
@@ -249,11 +249,11 @@ button {
 }
 
 .nav__links a:hover {
-  color: var(--soft-green);
+  color: var(--primary);
 }
 
 .nav__links a.active {
-  color: var(--soft-green);
+  color: var(--primary);
 }
 
 .nav__cta {
@@ -273,7 +273,7 @@ button {
 .nav__toggle span {
   width: 26px;
   height: 3px;
-  background: var(--navy);
+  background: var(--primary);
   border-radius: 2px;
   transition: var(--transition);
 }
@@ -295,7 +295,7 @@ button {
    ============================================================ */
 .hero {
   margin-top: 78px;
-  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: var(--white);
   position: relative;
   overflow: hidden;
@@ -319,8 +319,8 @@ button {
 
 .hero__badge {
   display: inline-block;
-  background: rgba(46, 139, 87, .2);
-  color: var(--green-light);
+  background: rgba(182, 39, 216, .2);
+  color: var(--primary-light);
   padding: 6px 18px;
   border-radius: 20px;
   font-size: .8rem;
@@ -338,7 +338,7 @@ button {
 }
 
 .hero__title .highlight {
-  color: var(--green-light);
+  color: var(--primary-light);
 }
 
 .hero__subtitle {
@@ -372,13 +372,13 @@ button {
 }
 
 .intro__image {
-  background: var(--off-white);
+  background: var(--bg-section);
   border-radius: var(--radius-lg);
   height: 380px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: .9rem;
   border: 2px dashed var(--border);
 }
@@ -386,13 +386,13 @@ button {
 .intro__text h2 {
   font-size: 1.9rem;
   font-weight: 700;
-  color: var(--navy);
+  color: var(--text-primary);
   margin-bottom: 16px;
   line-height: 1.3;
 }
 
 .intro__text p {
-  color: var(--text-muted);
+  color: var(--text-secondary);
   margin-bottom: 24px;
   font-size: 1rem;
 }
@@ -419,14 +419,14 @@ button {
 .level-card:hover {
   transform: translateY(-6px);
   box-shadow: var(--shadow-lg);
-  border-color: var(--soft-green);
+  border-color: var(--primary);
 }
 
 .level-card__icon {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -437,12 +437,12 @@ button {
 .level-card h3 {
   font-size: 1.2rem;
   font-weight: 600;
-  color: var(--navy);
+  color: var(--text-primary);
   margin-bottom: 10px;
 }
 
 .level-card p {
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: .92rem;
   line-height: 1.6;
 }
@@ -472,25 +472,25 @@ button {
   width: 56px;
   height: 56px;
   border-radius: var(--radius-sm);
-  background: rgba(46, 139, 87, .1);
+  background: rgba(182, 39, 216, .1);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 16px;
   font-size: 1.5rem;
-  color: var(--soft-green);
+  color: var(--primary);
 }
 
 .why-card h3 {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--navy);
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 
 .why-card p {
   font-size: .88rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
@@ -498,7 +498,7 @@ button {
    CTA SECTION
    ============================================================ */
 .cta {
-  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: var(--white);
   text-align: center;
   padding: 80px 0;
@@ -521,7 +521,7 @@ button {
    FOOTER
    ============================================================ */
 .footer {
-  background: var(--navy-dark);
+  background: var(--footer-bg);
   color: rgba(255, 255, 255, .75);
   padding: 60px 0 0;
 }
@@ -565,7 +565,7 @@ button {
 }
 
 .footer__social a:hover {
-  background: var(--soft-green);
+  background: var(--primary);
 }
 
 .footer__col h4 {
@@ -585,7 +585,7 @@ button {
 }
 
 .footer__col ul li a:hover {
-  color: var(--soft-green);
+  color: var(--footer-link);
   padding-left: 4px;
 }
 
@@ -601,7 +601,7 @@ button {
    ============================================================ */
 .page-hero {
   margin-top: 78px;
-  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: var(--white);
   text-align: center;
   padding: 70px 0;
@@ -628,12 +628,12 @@ button {
 .about-history__text h2 {
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--navy);
+  color: var(--text-primary);
   margin-bottom: 16px;
 }
 
 .about-history__text p {
-  color: var(--text-muted);
+  color: var(--text-secondary);
   margin-bottom: 14px;
   font-size: .95rem;
 }
@@ -656,14 +656,14 @@ button {
 
 .vmv-card:hover {
   box-shadow: var(--shadow-md);
-  border-color: var(--soft-green);
+  border-color: var(--primary);
 }
 
 .vmv-card__icon {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--soft-green), var(--green-light));
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -674,12 +674,12 @@ button {
 .vmv-card h3 {
   font-size: 1.15rem;
   font-weight: 600;
-  color: var(--navy);
+  color: var(--text-primary);
   margin-bottom: 12px;
 }
 
 .vmv-card p, .vmv-card ul {
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: .9rem;
   line-height: 1.7;
 }
@@ -698,7 +698,7 @@ button {
 }
 
 .management__content p {
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: 1rem;
   margin-bottom: 16px;
   line-height: 1.8;
@@ -713,7 +713,7 @@ button {
 }
 
 .curriculum__content p {
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: 1rem;
   margin-bottom: 16px;
   line-height: 1.8;
@@ -733,8 +733,8 @@ button {
   border-radius: var(--radius-sm);
   font-size: .9rem;
   font-weight: 500;
-  background: var(--off-white);
-  color: var(--text-dark);
+  background: var(--bg-section);
+  color: var(--text-primary);
   border: 1px solid var(--border);
   cursor: pointer;
   transition: all var(--transition);
@@ -742,9 +742,9 @@ button {
 
 .subjects__tab:hover,
 .subjects__tab.active {
-  background: var(--navy);
+  background: var(--primary);
   color: var(--white);
-  border-color: var(--navy);
+  border-color: var(--primary);
 }
 
 .subjects__panel {
@@ -767,7 +767,7 @@ button {
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   font-size: .92rem;
-  color: var(--text-dark);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -781,8 +781,8 @@ button {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: rgba(46, 139, 87, .1);
-  color: var(--soft-green);
+  background: rgba(182, 39, 216, .1);
+  color: var(--primary);
   font-size: .75rem;
   font-weight: 700;
   flex-shrink: 0;
@@ -817,13 +817,13 @@ button {
 .method-card h3 {
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--navy);
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 
 .method-card p {
   font-size: .88rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
@@ -844,7 +844,7 @@ button {
 }
 
 .extra-item:hover {
-  border-color: var(--soft-green);
+  border-color: var(--primary);
   box-shadow: var(--shadow-sm);
 }
 
@@ -856,7 +856,7 @@ button {
 .extra-item h4 {
   font-size: .92rem;
   font-weight: 600;
-  color: var(--navy);
+  color: var(--text-primary);
 }
 
 /* ============================================================
@@ -878,7 +878,7 @@ button {
 .req-card h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--navy);
+  color: var(--text-primary);
   margin-bottom: 14px;
   display: flex;
   align-items: center;
@@ -891,7 +891,7 @@ button {
 }
 
 .req-card ul li {
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: .92rem;
   margin-bottom: 8px;
   line-height: 1.6;
@@ -916,7 +916,7 @@ button {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--navy);
+  background: var(--primary);
   color: var(--white);
   display: flex;
   align-items: center;
@@ -948,13 +948,13 @@ button {
 .step__content h3 {
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--navy);
+  color: var(--text-primary);
   margin-bottom: 6px;
 }
 
 .step__content p {
   font-size: .9rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
@@ -975,13 +975,13 @@ button {
 }
 
 .calendar-card:hover {
-  border-color: var(--soft-green);
+  border-color: var(--primary);
 }
 
 .calendar-card__term {
   font-size: .8rem;
   font-weight: 600;
-  color: var(--soft-green);
+  color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 8px;
@@ -990,13 +990,13 @@ button {
 .calendar-card h3 {
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--navy);
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 
 .calendar-card p {
   font-size: .88rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 /* ============================================================
@@ -1018,11 +1018,11 @@ button {
   width: 48px;
   height: 48px;
   border-radius: var(--radius-sm);
-  background: rgba(46, 139, 87, .1);
+  background: rgba(182, 39, 216, .1);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--soft-green);
+  color: var(--primary);
   font-size: 1.2rem;
   flex-shrink: 0;
 }
@@ -1030,18 +1030,18 @@ button {
 .contact-info__text h4 {
   font-size: .95rem;
   font-weight: 600;
-  color: var(--navy);
+  color: var(--text-primary);
   margin-bottom: 4px;
 }
 
 .contact-info__text p,
 .contact-info__text a {
   font-size: .9rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .contact-info__text a:hover {
-  color: var(--soft-green);
+  color: var(--primary);
 }
 
 /* Contact Form */
@@ -1061,7 +1061,7 @@ button {
   display: block;
   font-size: .88rem;
   font-weight: 500;
-  color: var(--text-dark);
+  color: var(--text-primary);
   margin-bottom: 6px;
 }
 
@@ -1072,7 +1072,7 @@ button {
   padding: 12px 16px;
   font-family: 'Poppins', sans-serif;
   font-size: .9rem;
-  color: var(--text-dark);
+  color: var(--text-primary);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   transition: border-color var(--transition);
@@ -1083,8 +1083,8 @@ button {
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: var(--soft-green);
-  box-shadow: 0 0 0 3px rgba(46, 139, 87, .1);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(182, 39, 216, .1);
 }
 
 .form-group textarea {
@@ -1109,8 +1109,8 @@ button {
 }
 
 .form-success {
-  background: rgba(46, 139, 87, .1);
-  color: var(--green-dark);
+  background: rgba(182, 39, 216, .1);
+  color: var(--primary-dark);
   padding: 14px 20px;
   border-radius: var(--radius-sm);
   font-size: .9rem;
@@ -1127,14 +1127,14 @@ button {
 /* Map placeholder */
 .map-placeholder {
   margin-top: 50px;
-  background: var(--off-white);
+  background: var(--bg-section);
   border: 2px dashed var(--border);
   border-radius: var(--radius-md);
   height: 320px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: .9rem;
 }
 
@@ -1297,7 +1297,7 @@ button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 2px solid var(--soft-green);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
