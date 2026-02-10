@@ -6,12 +6,17 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  const supabase = window.supabaseClient;
+
   // Ensure supabase is loaded
-  if (typeof supabase === 'undefined' || !supabase) {
+  if (!supabase) {
     alert('Failed to initialize. Please refresh the page.');
+    console.error('Supabase client not available');
     window.location.href = 'login.html';
     return;
   }
+
+  console.log('Dashboard loaded, checking authentication...');
 
   /* ==========================================================
      SESSION CHECK — Redirect to login if not authenticated
