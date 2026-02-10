@@ -302,24 +302,31 @@ button {
   margin-top: 78px;
   position: relative;
   overflow: hidden;
-  overflow-x: hidden;
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   width: 100%;
+  max-width: 100vw;
+  min-height: 500px;
 }
 
 .hero-carousel__track {
   display: flex;
   transition: transform 0.7s cubic-bezier(0.45, 0, 0.15, 1);
   will-change: transform;
+  width: 100%;
 }
 
 /* ---------- Individual Slide ---------- */
 .hero-carousel__slide {
   min-width: 100%;
+  max-width: 100%;
+  width: 100%;
   flex-shrink: 0;
   position: relative;
   color: var(--white);
   overflow: hidden;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
 }
 
 /* Default hero slide — uses brand gradient */
@@ -362,11 +369,11 @@ button {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 100px 0 110px;
+  padding: 100px 20px 110px;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding-left: 20px;
-  padding-right: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .hero-carousel__ann-badge {
@@ -508,7 +515,11 @@ button {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 100px 0 110px;
+  padding: 100px 20px 110px;
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .hero__badge {
@@ -1382,6 +1393,14 @@ button {
 
 /* Tablet small — 768px */
 @media (max-width: 768px) {
+  .hero-carousel {
+    min-height: 450px;
+  }
+
+  .hero-carousel__slide {
+    min-height: 450px;
+  }
+
   .nav__links {
     position: fixed;
     top: 0;
@@ -1500,29 +1519,47 @@ button {
 
 /* Large Mobile — 600px */
 @media (max-width: 600px) {
+  .hero-carousel {
+    min-height: 420px;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  .hero-carousel__slide {
+    min-height: 420px;
+    max-width: 100vw;
+  }
+
   .hero__title,
   .hero-carousel__ann-title {
     font-size: 1.65rem;
     line-height: 1.3;
+    max-width: 100%;
   }
 
   .hero__subtitle,
   .hero-carousel__ann-text {
     font-size: .95rem;
     line-height: 1.6;
+    max-width: 100%;
   }
 
   .hero__content {
     padding: 45px 18px 65px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .hero-carousel__ann-content {
     padding: 50px 18px 70px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .hero__buttons {
-    max-width: 320px;
+    max-width: 100%;
     margin: 0 auto;
+    padding: 0 10px;
   }
 
   .hero-carousel__arrow {
@@ -1537,12 +1574,25 @@ button {
 
 /* Mobile — 480px */
 @media (max-width: 480px) {
+  .hero-carousel {
+    min-height: 380px;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  .hero-carousel__slide {
+    min-height: 380px;
+    max-width: 100vw;
+  }
+
   .hero__title,
   .hero-carousel__ann-title {
     font-size: 1.4rem;
     line-height: 1.3;
     margin-bottom: 12px;
     padding: 0 8px;
+    max-width: 100%;
+    word-wrap: break-word;
   }
 
   .hero__subtitle,
@@ -1551,15 +1601,20 @@ button {
     line-height: 1.6;
     margin-bottom: 18px;
     padding: 0 4px;
+    max-width: 100%;
+    word-wrap: break-word;
   }
 
   .hero__content {
     padding: 40px 16px 60px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .hero-carousel__ann-content {
     padding: 45px 16px 65px;
     max-width: 100%;
+    width: 100%;
   }
 
   .hero-carousel__ann-badge {
@@ -1651,12 +1706,25 @@ button {
 
 /* Extra Small Mobile — 360px and below */
 @media (max-width: 360px) {
+  .hero-carousel {
+    min-height: 360px;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  .hero-carousel__slide {
+    min-height: 360px;
+    max-width: 100vw;
+  }
+
   .hero__title,
   .hero-carousel__ann-title {
     font-size: 1.25rem;
     line-height: 1.35;
     margin-bottom: 10px;
     padding: 0 6px;
+    max-width: 100%;
+    word-wrap: break-word;
   }
 
   .hero__subtitle,
@@ -1665,15 +1733,20 @@ button {
     line-height: 1.55;
     margin-bottom: 14px;
     padding: 0 2px;
+    max-width: 100%;
+    word-wrap: break-word;
   }
 
   .hero__content {
     padding: 35px 12px 55px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .hero-carousel__ann-content {
     padding: 40px 12px 60px;
     max-width: 100%;
+    width: 100%;
   }
 
   .hero-carousel__ann-badge,
