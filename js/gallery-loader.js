@@ -37,16 +37,48 @@
 
         if (error) {
           console.error('Gallery fetch error:', error.message);
+          hideEmptySections([]);
           return;
         }
 
         if (data && data.length > 0) {
           injectGalleryImages(data);
+        } else {
+          hideEmptySections([]);
         }
       })
       .catch(function (err) {
         console.error('Gallery fetch failed:', err);
+        hideEmptySections([]);
       });
+  }
+
+  /* ---------- Hide sections when no images ---------- */
+  function hideEmptySections(images) {
+    // HOME PAGE
+    var isHomePage = window.location.pathname === '/' || 
+                     window.location.pathname === '/index.html' || 
+                     window.location.pathname.endsWith('/index.html') ||
+                     window.location.pathname === '';
+    
+    if (isHomePage) {
+      var introSection = document.getElementById('intro');
+      if (introSection) {
+        introSection.style.display = 'none';
+        console.log('Home intro section hidden - no image uploaded');
+      }
+    }
+
+    // ABOUT PAGE
+    var isAboutPage = window.location.pathname.includes('about.html');
+    
+    if (isAboutPage) {
+      var historySection = document.getElementById('history');
+      if (historySection) {
+        historySection.style.display = 'none';
+        console.log('About history section hidden - no image uploaded');
+      }
+    }
   }
 
   /* ---------- Inject images into placeholders ---------- */

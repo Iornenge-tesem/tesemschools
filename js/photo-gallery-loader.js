@@ -222,10 +222,12 @@
 
   /* ---------- Show Error State ---------- */
   function showError(message) {
-    galleryContainer.innerHTML = 
-      '<div class="photo-gallery__loader">' +
-        '<p style="color:#ef4444;">⚠️ ' + escapeHTML(message) + '</p>' +
-      '</div>';
+    // Hide the entire gallery section on error
+    var gallerySection = document.getElementById('gallery');
+    if (gallerySection) {
+      gallerySection.style.display = 'none';
+      console.log('Photo gallery section hidden - error loading images');
+    }
   }
 
   /* ---------- Utility Functions ---------- */
