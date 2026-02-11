@@ -421,19 +421,19 @@ button {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  background: rgba(255, 255, 255, .15);
-  border: 2px solid rgba(255, 255, 255, .25);
+  background: rgba(0, 0, 0, .2);
+  border: none;
   color: var(--white);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all var(--transition);
-  backdrop-filter: blur(6px);
-  opacity: 0;
+  backdrop-filter: blur(4px);
+  opacity: 0.7;
 }
 
 .hero-carousel:hover .hero-carousel__arrow {
@@ -441,8 +441,8 @@ button {
 }
 
 .hero-carousel__arrow:hover {
-  background: rgba(255, 255, 255, .3);
-  border-color: rgba(255, 255, 255, .5);
+  background: rgba(0, 0, 0, .4);
+  transform: translateY(-50%) scale(1.1);
 }
 
 .hero-carousel__arrow--prev { left: 20px; }
@@ -1563,8 +1563,8 @@ button {
   }
 
   .hero-carousel__arrow {
-    width: 38px;
-    height: 38px;
+    width: 30px;
+    height: 30px;
   }
 
   .hero-carousel__dots {
@@ -1657,16 +1657,16 @@ button {
   }
 
   .hero-carousel__arrow {
-    width: 36px;
-    height: 36px;
-    opacity: 1;
-    background: rgba(255, 255, 255, .25);
-    border: 1.5px solid rgba(255, 255, 255, .4);
+    width: 28px;
+    height: 28px;
+    opacity: 0.8;
+    background: rgba(0, 0, 0, .25);
+    border: none;
   }
 
   .hero-carousel__arrow svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
   }
 
   .hero-carousel__arrow--prev { left: 10px; }
@@ -1773,14 +1773,15 @@ button {
   }
 
   .hero-carousel__arrow {
-    width: 32px;
-    height: 32px;
-    background: rgba(255, 255, 255, .3);
+    width: 26px;
+    height: 26px;
+    background: rgba(0, 0, 0, .3);
+    opacity: 0.8;
   }
 
   .hero-carousel__arrow svg {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
   }
 
   .hero-carousel__arrow--prev { left: 8px; }

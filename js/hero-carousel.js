@@ -78,7 +78,6 @@
       var hasImage = ann.image_url && ann.image_url.trim() !== '';
       var slide    = document.createElement('div');
       var dateStr  = formatDate(ann.created_at);
-      var typeLabel = (ann.type || '').replace(/_/g, ' ');
 
       if (hasImage) {
         /* ----- Image-based slide ----- */
@@ -88,7 +87,6 @@
         slide.innerHTML =
           '<div class="hero-carousel__img-overlay" aria-hidden="true"></div>' +
           '<div class="hero-carousel__ann-content container">' +
-            '<span class="hero-carousel__ann-badge">' + escapeHTML(typeLabel) + '</span>' +
             '<h2 class="hero-carousel__ann-title">' + escapeHTML(ann.title) + '</h2>' +
             '<p class="hero-carousel__ann-text">' + escapeHTML(ann.content) + '</p>' +
             '<span class="hero-carousel__ann-date">' + dateStr + '</span>' +
@@ -111,7 +109,6 @@
 
         slide.innerHTML =
           '<div class="hero-carousel__ann-content container">' +
-            '<span class="hero-carousel__ann-badge">' + escapeHTML(typeLabel) + '</span>' +
             '<h2 class="hero-carousel__ann-title">' + escapeHTML(ann.title) + '</h2>' +
             '<p class="hero-carousel__ann-text">' + escapeHTML(ann.content) + '</p>' +
             '<span class="hero-carousel__ann-date">' + dateStr + '</span>' +

@@ -137,14 +137,13 @@
                 <input type="file" id="galleryFileInput" accept="image/jpeg,image/png,image/webp" />
               </div>
 
-              <!-- Category select for upload -->
+              <!-- Location select for upload -->
               <div style="margin-bottom:20px;">
-                <label for="uploadCategory" style="font-size:.82rem;font-weight:500;">Category:</label>
-                <select id="uploadCategory" style="padding:8px 12px;border:1px solid var(--admin-border);border-radius:6px;font-family:Poppins,sans-serif;font-size:.85rem;margin-left:8px;">
-                  <option value="campus">Campus</option>
-                  <option value="events">Events</option>
-                  <option value="activities">Activities</option>
-                  <option value="graduation">Graduation</option>
+                <label for="uploadLocation" style="font-size:.82rem;font-weight:500;">Where should this image appear?</label>
+                <select id="uploadLocation" style="padding:8px 12px;border:1px solid var(--admin-border);border-radius:6px;font-family:Poppins,sans-serif;font-size:.85rem;margin-top:6px;width:100%;max-width:400px;">
+                  <option value="home_school">Home Page - School Building Image</option>
+                  <option value="about_founders">About Page - Founders / Campus Image</option>
+                  <option value="gallery">General Gallery (not displayed on pages)</option>
                 </select>
               </div>
 
@@ -203,18 +202,6 @@
           <div class="form-group">
             <label for="annTitle">Title</label>
             <input type="text" id="annTitle" placeholder="Announcement title" required />
-          </div>
-
-          <div class="form-group">
-            <label for="annType">Type</label>
-            <select id="annType" required>
-              <option value="">Select type…</option>
-              <option value="admission">Admission</option>
-              <option value="employment">Employment</option>
-              <option value="activities">Activities</option>
-              <option value="term_closure">Term Closure</option>
-              <option value="resumption">Resumption</option>
-            </select>
           </div>
 
           <div class="form-group">

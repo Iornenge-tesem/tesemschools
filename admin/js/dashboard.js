@@ -161,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
       modalTitle.textContent = 'Edit Announcement';
       document.getElementById('announcementId').value = data.id;
       document.getElementById('annTitle').value       = data.title || '';
-      document.getElementById('annType').value        = data.type || '';
       document.getElementById('annContent').value     = data.content || '';
       document.getElementById('annPublished').checked  = data.is_published || false;
 
@@ -272,13 +271,12 @@ document.addEventListener('DOMContentLoaded', () => {
     modalSave.addEventListener('click', async () => {
       const id          = document.getElementById('announcementId').value;
       const title       = document.getElementById('annTitle').value.trim();
-      const type        = document.getElementById('annType').value;
       const content     = document.getElementById('annContent').value.trim();
       const isPublished = document.getElementById('annPublished').checked;
       const imageUrl    = document.getElementById('annImageUrl').value || null;
 
       // Validation
-      if (!title || !type || !content) {
+      if (!title || !content) {
         showToast('Please fill in all required fields.', 'warning');
         return;
       }
@@ -291,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // UPDATE existing announcement
           const { error } = await supabase
             .from('announcements')
-            .update({ title, type, content, is_published: isPublished, image_url: imageUrl, updated_at: new Date().toISOString() })
+            .update({ title, content, is_published: isPublished, image_url: imageUrl, updated_at: new Date().toISOString() })
             .eq('id', id);
 
           if (error) throw error;
@@ -300,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // INSERT new announcement
           const { error } = await supabase
             .from('announcements')
-            .insert([{ title, type, content, is_published: isPublished, image_url: imageUrl }]);
+            .insert([{ title, content, is_published: isPublished, image_url: imageUrl }]);
 
           if (error) throw error;
           showToast('Announcement created successfully.');
@@ -343,7 +341,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <thead>
             <tr>
               <th>Title</th>
-              <th>Type</th>
               <th>Status</th>
               <th>Date</th>
               <th>Actions</th>
@@ -356,12 +353,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const status = item.is_published
           ? '<span class="badge badge--published">Published</span>'
           : '<span class="badge badge--draft">Draft</span>';
-        const typeLabel = item.type ? item.type.replace('_', ' ') : '—';
 
         html += `
             <tr>
               <td><strong>${escapeHTML(item.title)}</strong></td>
-              <td style="text-transform:capitalize;">${escapeHTML(typeLabel)}</td>
               <td>${status}</td>
               <td>${date}</td>
               <td>
@@ -462,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const category = document.getElementById('uploadCategory')?.value || 'campus';
+    const location = document.getElementById('uploadLocation')?.value || 'gallery';
     const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
 
     showToast('Uploading image…', 'warning');
@@ -485,7 +480,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Insert record into gallery table
       const { error: dbError } = await supabase
         .from('gallery')
-        .insert([{ image_url: imageUrl, category }]);
+        .insert([{ image_url: imageUrl, location: location }]);
 
       if (dbError) throw dbError;
 
@@ -520,16 +515,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      grid.innerHTML = data.map(img => `
+      grid.innerHTML = data.map(img => {
+        const locationLabel = {
+          'home_school': 'Home - School Building',
+          'about_founders': 'About - Founders/Campus',
+          'gallery': 'General Gallery'
+        }[img.location] || img.location || 'Gallery';
+        
+        return `
         <div class="gallery-item">
-          <img src="${escapeHTML(img.image_url)}" alt="${escapeHTML(img.category || 'Gallery image')}" loading="lazy" />
+          <img src="${escapeHTML(img.image_url)}" alt="${escapeHTML(locationLabel)}" loading="lazy" />
           <div class="gallery-item__overlay">
+            <span style="position:absolute;top:8px;left:8px;background:rgba(182,39,216,.9);color:#fff;padding:4px 10px;border-radius:4px;font-size:.7rem;font-weight:500;">${escapeHTML(locationLabel)}</span>
             <button class="gallery-item__delete" onclick="deleteGalleryImage('${img.id}', '${extractFileName(img.image_url)}')" title="Delete image">
               🗑️
             </button>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     } catch (err) {
       grid.innerHTML = `<p style="color:#dc2626;font-size:.85rem;">Error: ${err.message}</p>`;
     }
@@ -728,7 +732,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #e5e7eb;">
             <div>
               <strong style="font-size:.9rem;">${escapeHTML(item.title)}</strong>
-              <span style="font-size:.78rem;color:#4b5563;margin-left:8px;text-transform:capitalize;">${escapeHTML((item.type || '').replace('_', ' '))}</span>
             </div>
             <div style="display:flex;align-items:center;gap:10px;">
               ${status}
