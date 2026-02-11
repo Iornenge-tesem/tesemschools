@@ -26,6 +26,19 @@
 
 ## ⚠️ REQUIRED: Run These SQL Migrations in Supabase
 
+### Step 0: Create Storage Buckets (MUST RUN FIRST!)
+
+**Files:** `admin/setup-gallery-storage.sql` and `admin/setup-announcements-storage.sql`
+
+Navigate to your Supabase project → SQL Editor → Run BOTH files completely:
+
+**First, run `admin/setup-gallery-storage.sql`** (creates gallery bucket with policies)
+**Then, run `admin/setup-announcements-storage.sql`** (creates announcements bucket with policies)
+
+**Why:** These create the storage buckets required for uploading images. Without these, you'll get "bucket not found" errors.
+
+---
+
 ### Step 1: Update Database Schema
 
 **File:** `admin/update-schema-migrations.sql`
@@ -51,50 +64,9 @@ CHECK (location IN ('home_school', 'about_founders', 'gallery'));
 
 ---
 
-### Step 2: Complete Announcements Storage Bucket Setup
-
-**File:** `admin/setup-announcements-storage.sql`
-
-You already ran the DROP POLICY statements. Now run the CREATE POLICY statements (lines 19-48):
-
-```sql
--- Allow public to view announcement images
-CREATE POLICY "Allow public select on announcements bucket"
-ON storage.objects FOR SELECT
-USING (bucket_id = 'announcements');
-
--- Allow authenticated users to insert announcement images
-CREATE POLICY "Allow authenticated insert on announcements bucket"
-ON storage.objects FOR INSERT
-WITH CHECK (
-  bucket_id = 'announcements' 
-  AND auth.role() = 'authenticated'
-);
-
--- Allow authenticated users to update announcement images
-CREATE POLICY "Allow authenticated update on announcements bucket"
-ON storage.objects FOR UPDATE
-USING (
-  bucket_id = 'announcements' 
-  AND auth.role() = 'authenticated'
-);
-
--- Allow authenticated users to delete announcement images
-CREATE POLICY "Allow authenticated delete on announcements bucket"
-ON storage.objects FOR DELETE
-USING (
-  bucket_id = 'announcements' 
-  AND auth.role() = 'authenticated'
-);
-```
-
-**Why:** These policies allow public viewing of announcement images while restricting upload/edit/delete to authenticated admins.
-
----
-
 ## 🧪 Testing Checklist
 
-After running the SQL migrations above:
+After running the SQL scripts above:
 
 ### Test Announcements (No Type Field)
 - [ ] Log into admin dashboard
