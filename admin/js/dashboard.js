@@ -566,7 +566,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <span style="position:absolute;top:8px;left:8px;background:rgba(182,39,216,.9);color:#fff;padding:4px 10px;border-radius:4px;font-size:.7rem;font-weight:500;">${escapeHTML(locationLabel)}</span>
             ${captionDisplay}
             <div style="position:absolute;bottom:8px;right:8px;display:flex;gap:8px;">
-              <button class="gallery-item__edit" onclick="openReplaceModal('${img.id}', '${escapeAttr(img.image_url)}', '${escapeAttr(img.caption || '')}', '${img.location}')" title="Replace image">
+              <button class="gallery-item__edit" 
+                data-id="${img.id}" 
+                data-url="${escapeHTML(img.image_url)}" 
+                data-caption="${escapeHTML(img.caption || '')}" 
+                data-location="${img.location}" 
+                title="Replace image">
                 ✏️
               </button>
               <button class="gallery-item__delete" onclick="deleteGalleryImage('${img.id}', '${extractFileName(img.image_url)}')" title="Delete image">
@@ -577,6 +582,17 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
       }).join('');
+      
+      // Add event listeners for edit buttons
+      grid.querySelectorAll('.gallery-item__edit').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = this.dataset.id;
+          const url = this.dataset.url;
+          const caption = this.dataset.caption;
+          const location = this.dataset.location;
+          openReplaceModal(id, url, caption, location);
+        });
+      });
     } catch (err) {
       grid.innerHTML = `<p style="color:#dc2626;font-size:.85rem;">Error: ${err.message}</p>`;
     }
