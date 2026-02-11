@@ -141,6 +141,9 @@
   }
 
   /* ---------- Lightbox Functions ---------- */
+  var touchStartX = 0;
+  var touchEndX = 0;
+  
   function setupLightbox() {
     if (!lightbox || !lightboxClose || !lightboxPrev || !lightboxNext) return;
     if (lightboxSetup) return; // Already set up
@@ -169,6 +172,31 @@
       if (e.key === 'ArrowLeft') showPrevImage();
       if (e.key === 'ArrowRight') showNextImage();
     });
+    
+    // Touch/swipe gestures for mobile
+    lightbox.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    lightbox.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+  }
+  
+  function handleSwipe() {
+    var swipeThreshold = 50; // minimum distance for swipe
+    var diff = touchStartX - touchEndX;
+    
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        // Swiped left - show next image
+        showNextImage();
+      } else {
+        // Swiped right - show previous image
+        showPrevImage();
+      }
+    }
   }
 
   window.openLightbox = function (index) {
