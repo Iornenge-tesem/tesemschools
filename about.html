@@ -141,27 +141,45 @@
         <div class="accent-line"></div>
       </div>
 
-      <div class="management__content">
-        <p>
-          At Tesem Model Schools, we believe that effective education begins with
-          strong leadership and transparent governance. Our management team is
-          composed of experienced educators and administrators who work
-          collaboratively with parents, teachers, and the wider community to
-          uphold the highest standards of academic delivery and student welfare.
-        </p>
-        <p>
-          We foster a culture of accountability, continuous professional
-          development, and open communication. Every decision we make is guided
-          by a single question: <strong>"Is this in the best interest of the
-          child?"</strong> This principle drives our policies, teaching methods,
-          resource allocation, and community engagement.
-        </p>
-        <p>
-          Our approach combines structured discipline with compassion, ensuring
-          that students are motivated to achieve their potential in a supportive
-          and orderly environment. We are committed to transparency and welcome
-          parents as active partners in their children's education.
-        </p>
+      <div class="management__content expandable-text">
+        <div class="expandable-text__preview">
+          <p>
+            At Tesem Model Schools, we believe that effective education begins with
+            strong leadership and transparent governance. Our management team is
+            composed of experienced educators and administrators who work
+            collaboratively with parents, teachers, and the wider community to
+            uphold the highest standards of academic delivery and student welfare.
+          </p>
+        </div>
+        <div class="expandable-text__full" style="display: none;">
+          <p>
+            At Tesem Model Schools, we believe that effective education begins with
+            strong leadership and transparent governance. Our management team is
+            composed of experienced educators and administrators who work
+            collaboratively with parents, teachers, and the wider community to
+            uphold the highest standards of academic delivery and student welfare.
+          </p>
+          <p>
+            We foster a culture of accountability, continuous professional
+            development, and open communication. Every decision we make is guided
+            by a single question: <strong>"Is this in the best interest of the
+            child?"</strong> This principle drives our policies, teaching methods,
+            resource allocation, and community engagement.
+          </p>
+          <p>
+            Our approach combines structured discipline with compassion, ensuring
+            that students are motivated to achieve their potential in a supportive
+            and orderly environment. We are committed to transparency and welcome
+            parents as active partners in their children's education.
+          </p>
+        </div>
+        <button class="expandable-text__toggle" onclick="toggleExpandableText(this)">
+          <span class="toggle-more">Show More</span>
+          <span class="toggle-less" style="display: none;">Show Less</span>
+          <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
     </div>
   </section>
@@ -185,6 +203,17 @@
     </div>
   </section>
 
+  <!-- Gallery Lightbox -->
+  <div class="gallery-lightbox" id="galleryLightbox">
+    <button class="gallery-lightbox__close" id="lightboxClose" aria-label="Close">×</button>
+    <button class="gallery-lightbox__arrow gallery-lightbox__arrow--prev" id="lightboxPrev" aria-label="Previous">‹</button>
+    <button class="gallery-lightbox__arrow gallery-lightbox__arrow--next" id="lightboxNext" aria-label="Next">›</button>
+    <div class="gallery-lightbox__content">
+      <img id="lightboxImage" class="gallery-lightbox__image" src="" alt="" />
+      <p id="lightboxCaption" class="gallery-lightbox__caption"></p>
+    </div>
+  </div>
+
   <!-- ===== CALL TO ACTION ===== -->
   <section class="cta">
     <div class="container">
@@ -196,6 +225,17 @@
       <a href="admissions.html" class="btn btn--primary">Apply for Admission</a>
     </div>
   </section>
+
+  <!-- ===== LIGHTBOX MODAL ===== -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox__close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
+    <button class="lightbox__prev" id="lightboxPrev" aria-label="Previous image">&lsaquo;</button>
+    <button class="lightbox__next" id="lightboxNext" aria-label="Next image">&rsaquo;</button>
+    <div class="lightbox__content">
+      <img src="" alt="" id="lightboxImage" class="lightbox__image" />
+      <div class="lightbox__caption" id="lightboxCaption"></div>
+    </div>
+  </div>
 
   <!-- ===== FOOTER ===== -->
   <footer class="footer">
@@ -269,6 +309,8 @@
   <script src="js/gallery-loader.js"></script>
   <!-- Photo Gallery Loader -->
   <script src="js/photo-gallery-loader.js"></script>
+  <!-- Expandable Text Toggle -->
+  <script src="js/expandable-text.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

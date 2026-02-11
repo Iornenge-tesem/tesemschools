@@ -54,22 +54,40 @@
         <div class="accent-line"></div>
       </div>
 
-      <div class="curriculum__content">
-        <p>
-          At Tesem Model Schools, we deliver a comprehensive curriculum
-          approved by the Federal Ministry of Education and aligned with
-          NERDC guidelines. Our programme covers nursery, primary, and
-          secondary levels, with each stage carefully structured to build
-          upon the previous one.
-        </p>
-        <p>
-          We emphasise literacy, numeracy, sciences, and social studies,
-          while also integrating ICT, creative arts, and moral instruction
-          into everyday learning. Our curriculum is regularly reviewed to
-          reflect current educational best practices and to prepare students
-          for national examinations such as Common Entrance, BECE, WAEC,
-          NECO, and JAMB.
-        </p>
+      <div class="curriculum__content expandable-text">
+        <div class="expandable-text__preview">
+          <p>
+            At Tesem Model Schools, we deliver a comprehensive curriculum
+            approved by the Federal Ministry of Education and aligned with
+            NERDC guidelines. Our programme covers nursery, primary, and
+            secondary levels, with each stage carefully structured to build
+            upon the previous one.
+          </p>
+        </div>
+        <div class="expandable-text__full" style="display: none;">
+          <p>
+            At Tesem Model Schools, we deliver a comprehensive curriculum
+            approved by the Federal Ministry of Education and aligned with
+            NERDC guidelines. Our programme covers nursery, primary, and
+            secondary levels, with each stage carefully structured to build
+            upon the previous one.
+          </p>
+          <p>
+            We emphasise literacy, numeracy, sciences, and social studies,
+            while also integrating ICT, creative arts, and moral instruction
+            into everyday learning. Our curriculum is regularly reviewed to
+            reflect current educational best practices and to prepare students
+            for national examinations such as Common Entrance, BECE, WAEC,
+            NECO, and JAMB.
+          </p>
+        </div>
+        <button class="expandable-text__toggle" onclick="toggleExpandableText(this)">
+          <span class="toggle-more">Show More</span>
+          <span class="toggle-less" style="display: none;">Show Less</span>
+          <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
     </div>
   </section>
@@ -315,6 +333,8 @@
   <script src="js/admission-status-loader.js"></script>
   <!-- Hero Background Loader -->
   <script src="js/hero-background-loader.js"></script>
+  <!-- Expandable Text Toggle -->
+  <script src="js/expandable-text.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
