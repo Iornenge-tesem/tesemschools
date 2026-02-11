@@ -669,6 +669,14 @@ button {
   align-items: center;
   justify-content: center;
   font-size: .9rem;
+  border: none;
+  cursor: pointer;
+  transition: all var(--admin-transition);
+}
+
+.gallery-item__delete:hover {
+  background: #dc2626;
+  transform: scale(1.1);
 }
 
 /* File upload area */

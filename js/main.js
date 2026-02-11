@@ -79,13 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ----------------------------------------------------------
-     4. CONTACT FORM VALIDATION
+     4. CONTACT FORM SUBMISSION TO SUPABASE
      ---------------------------------------------------------- */
   const contactForm   = document.getElementById('contactForm');
   const formSuccess   = document.getElementById('formSuccess');
 
   if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       let isValid = true;
 
@@ -133,12 +133,57 @@ document.addEventListener('DOMContentLoaded', () => {
         isValid = false;
       }
 
-      // If valid, show success and reset
+      // If valid, submit to Supabase
       if (isValid) {
-        contactForm.reset();
-        if (formSuccess) {
-          formSuccess.classList.add('show');
-          setTimeout(() => formSuccess.classList.remove('show'), 5000);
+        // Disable submit button
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+
+        try {
+          // Check if Supabase is available
+          if (typeof window.supabase === 'undefined' || !window.supabase.createClient) {
+            throw new Error('Supabase not initialized');
+          }
+
+          const SUPABASE_URL = 'https://rnqoyaedeegtgciwamqo.supabase.co';
+          const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJucW95YWVkZWVndGdjaXdhbXFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NTE3MjgsImV4cCI6MjA4NjMyNzcyOH0.sIqdBlGpQGr7J73_SEUa3x0xUFo6UJHvqm1hEBtwn-8';
+          const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+          // Insert into contact_submissions table
+          const { data, error } = await supabase
+            .from('contact_submissions')
+            .insert([{
+              full_name: name.value.trim(),
+              email: email.value.trim(),
+              phone: phone.value.trim() || null,
+              subject: subject.value.trim(),
+              message: message.value.trim()
+            }]);
+
+          if (error) throw error;
+
+          // Success - reset form and show message
+          contactForm.reset();
+          if (formSuccess) {
+            formSuccess.classList.add('show');
+            setTimeout(() => formSuccess.classList.remove('show'), 5000);
+          }
+
+          // Re-enable button
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+
+        } catch (error) {
+          console.error('Submission error:', error);
+          
+          // Show error to user
+          alert('Sorry, there was an error sending your message. Please try again or contact us directly via phone/email.');
+          
+          // Re-enable button
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
         }
       }
     });
@@ -195,6 +240,25 @@ document.addEventListener('DOMContentLoaded', () => {
       el.style.transform = 'translateY(24px)';
       el.style.transition = 'opacity .6s ease, transform .6s ease';
       observer.observe(el);
+    });
+  }
+
+  /* ----------------------------------------------------------
+     7. COLLAPSIBLE WELCOME TEXT (Mobile Only)
+     ---------------------------------------------------------- */
+  const introText = document.querySelector('.intro__text');
+  
+  if (introText && window.innerWidth <= 768) {
+    introText.style.cursor = 'pointer';
+    
+    // Toggle expanded class on click
+    introText.addEventListener('click', function(e) {
+      // Don't toggle if clicking on the button link
+      if (e.target.tagName === 'A') return;
+      
+      this.classList.toggle('expanded');
+      const paragraphs = this.querySelectorAll('p');
+      paragraphs.forEach(p => p.classList.toggle('expanded'));
     });
   }
 

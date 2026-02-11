@@ -28,26 +28,39 @@ document.addEventListener('DOMContentLoaded', () => {
       if (error) {
         console.error('Auth check error:', error);
         window.location.href = 'login.html';
-        return;
+        return false;
       }
       
       if (!session) {
         // Not authenticated, redirect to login
         console.log('Not authenticated, redirecting to login...');
         window.location.href = 'login.html';
-        return;
+        return false;
       }
       
       // Authenticated, continue loading dashboard
       console.log('User authenticated:', session.user.email);
+      
+      // Update UI with user info
+      const adminEmail = document.getElementById('adminEmail');
+      const adminAvatar = document.getElementById('adminAvatar');
+      if (adminEmail) adminEmail.textContent = session.user.email;
+      if (adminAvatar) adminAvatar.textContent = session.user.email.charAt(0).toUpperCase();
+      
+      return true;
     } catch (error) {
-      console.error('Auth check error:', error);
+      console.error('Auth check failed:', error);
       window.location.href = 'login.html';
+      return false;
     }
   }
   
-  // Run auth check immediately
-  checkAuth();
+  // Run auth check and initialize dashboard when ready
+  checkAuth().then((isAuthenticated) => {
+    if (isAuthenticated) {
+      init();
+    }
+  });
 
   /* ==========================================================
      UTILITY: Toast Notifications
@@ -84,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     dashboard:     { title: 'Dashboard',     subtitle: 'Overview of your school system' },
     announcements: { title: 'Announcements', subtitle: 'Manage school announcements' },
     gallery:       { title: 'Gallery',        subtitle: 'Upload and manage images' },
+    contact:       { title: 'Contact Messages', subtitle: 'View and manage contact form submissions' },
     settings:      { title: 'Site Settings',  subtitle: 'Configure website options' },
   };
 
@@ -677,26 +691,25 @@ document.addEventListener('DOMContentLoaded', () => {
         .from('gallery')
         .select('*', { count: 'exact', head: true });
 
-      // Admission status
-      const { data: settings } = await supabase
-        .from('site_settings')
-        .select('admission_open')
-        .limit(1)
-        .single();
+      // Count contact messages (new only)
+      const { count: contactCount } = await supabase
+        .from('contact_submissions')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'new');
 
       const statAnn = document.getElementById('statAnnouncements');
       const statGal = document.getElementById('statGallery');
       const statPub = document.getElementById('statPublished');
-      const statAdm = document.getElementById('statAdmission');
+      const statContact = document.getElementById('statContact');
 
       if (statAnn) statAnn.textContent = annCount ?? 0;
       if (statGal) statGal.textContent = galCount ?? 0;
       if (statPub) statPub.textContent = pubCount ?? 0;
-      if (statAdm) {
-        const isOpen = settings?.admission_open;
-        statAdm.innerHTML = isOpen
-          ? '<span class="badge badge--open">Open</span>'
-          : '<span class="badge badge--closed">Closed</span>';
+      if (statContact) {
+        const count = contactCount ?? 0;
+        statContact.innerHTML = count > 0 
+          ? `<span style="color:#f59e0b;font-weight:700;">${count}</span> new`
+          : '0';
       }
     } catch (err) {
       console.error('Stats error:', err);
@@ -745,6 +758,156 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================
+     CONTACT MESSAGES — View & Manage
+     ========================================================== */
+  const contactStatusFilter = document.getElementById('contactStatusFilter');
+
+  // Load contact messages
+  async function loadContactMessages() {
+    const container = document.getElementById('contactMessagesTable');
+    if (!container) return;
+
+    container.innerHTML = '<div class="page-loader"><div class="loading-spinner"></div></div>';
+
+    try {
+      const { data, error } = await supabase
+        .from('contact_submissions')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        container.innerHTML = '<p style="text-align:center;color:#9ca3af;font-size:.9rem;padding:40px 0;">No contact messages yet.</p>';
+        return;
+      }
+
+      // Get filter value
+      const filterStatus = contactStatusFilter ? contactStatusFilter.value : 'all';
+      const filteredData = filterStatus === 'all' ? data : data.filter(m => m.status === filterStatus);
+
+      if (filteredData.length === 0) {
+        container.innerHTML = '<p style="text-align:center;color:#9ca3af;font-size:.9rem;padding:40px 0;">No messages with this status.</p>';
+        return;
+      }
+
+      let html = `
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Subject</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      filteredData.forEach(msg => {
+        const date = new Date(msg.created_at).toLocaleDateString('en-NG', { day: '2-digit', month: 'short', year: 'numeric' });
+        const statusColors = { new: '#3b82f6', read: '#f59e0b', replied: '#10b981' };
+        const statusLabels = { new: 'New', read: 'Read', replied: 'Replied' };
+
+        html += `
+          <tr>
+            <td><strong>${escapeHTML(msg.full_name)}</strong></td>
+            <td>${escapeHTML(msg.email)}</td>
+            <td>${escapeHTML(msg.subject)}</td>
+            <td>${date}</td>
+            <td><span class="badge" style="background:${statusColors[msg.status] || '#6b7280'};color:#fff;">${statusLabels[msg.status] || msg.status}</span></td>
+            <td>
+              <button class="admin-btn admin-btn--sm admin-btn--outline" onclick="viewContactMessage('${msg.id}')" title="View Details">
+                👁️ View
+              </button>
+              <button class="admin-btn admin-btn--sm admin-btn--danger" onclick="deleteContactMessage('${msg.id}')" title="Delete">
+                🗑️
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    } catch (err) {
+      container.innerHTML = `<p style="color:#dc2626;font-size:.85rem;">Error: ${err.message}</p>`;
+    }
+  }
+
+  // View contact message details (modal)
+  window.viewContactMessage = async function(id) {
+    try {
+      const { data, error } = await supabase
+        .from('contact_submissions')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) throw error;
+
+      const date = new Date(data.created_at).toLocaleString('en-NG');
+      const message = `
+📧 CONTACT MESSAGE
+
+FROM: ${data.full_name}
+EMAIL: ${data.email}
+PHONE: ${data.phone || 'Not provided'}
+SUBJECT: ${data.subject}
+DATE: ${date}
+STATUS: ${data.status.toUpperCase()}
+
+MESSAGE:
+${data.message}
+
+---
+Actions:
+- Mark as Read
+- Mark as Replied
+- Delete
+      `;
+
+      if (confirm(message + '\n\nMark as read?')) {
+        await supabase
+          .from('contact_submissions')
+          .update({ status: 'read' })
+          .eq('id', id);
+        
+        showToast('Message marked as read.');
+        loadContactMessages();
+      }
+    } catch (err) {
+      showToast('Error loading message: ' + err.message, 'error');
+    }
+  };
+
+  // Delete contact message
+  window.deleteContactMessage = async function(id) {
+    if (!confirm('Delete this message permanently?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      showToast('Message deleted successfully.');
+      loadContactMessages();
+    } catch (err) {
+      showToast('Error deleting message: ' + err.message, 'error');
+    }
+  };
+
+  // Filter change listener
+  if (contactStatusFilter) {
+    contactStatusFilter.addEventListener('change', loadContactMessages);
+  }
+
+  /* ==========================================================
      UTILITY: Escape HTML to prevent XSS
      ========================================================== */
   function escapeHTML(str) {
@@ -776,18 +939,15 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ==========================================================
      INITIALIZE — Load all data on page ready
      ========================================================== */
-  async function init() {
-    // Wait for auth check before loading data
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return;
-
+  function init() {
     loadDashboardStats();
     loadRecentAnnouncements();
     loadAnnouncements();
     loadGallery();
+    loadContactMessages();
     loadSettings();
   }
 
-  init();
+  // Note: init() is called by checkAuth() after authentication is confirmed
 
 });

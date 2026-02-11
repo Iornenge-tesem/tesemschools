@@ -51,6 +51,8 @@
 
   /* ---------- Inject images into placeholders ---------- */
   function injectGalleryImages(images) {
+    console.log('Gallery images loaded:', images.length);
+    
     // Find images for each location
     var homeSchoolImg = images.find(function (img) {
       return img.location === 'home_school';
@@ -60,19 +62,36 @@
       return img.location === 'about_founders';
     });
 
+    console.log('Home school image:', homeSchoolImg ? 'Found' : 'Not found');
+    console.log('About founders image:', aboutFoundersImg ? 'Found' : 'Not found');
+    console.log('Current path:', window.location.pathname);
+
     // HOME PAGE - School Building Image (on home page only)
-    if (homeSchoolImg && window.location.pathname.match(/(index\.html|\\/$|^$)/)) {
+    var isHomePage = window.location.pathname === '/' || 
+                     window.location.pathname === '/index.html' || 
+                     window.location.pathname.endsWith('/index.html') ||
+                     window.location.pathname === '';
+    
+    if (homeSchoolImg && isHomePage) {
       var homeImageEl = document.querySelector('.intro__image');
       if (homeImageEl) {
-        homeImageEl.innerHTML = '<img src=\"' + escapeAttr(homeSchoolImg.image_url) + '\" alt=\"Tesem Model Schools Building\" style=\"width:100%;height:100%;object-fit:cover;border-radius:10px;\" />';
+        console.log('Injecting home school image...');
+        homeImageEl.innerHTML = '<img src="' + escapeAttr(homeSchoolImg.image_url) + '" alt="Tesem Model Schools Building" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" />';
+      } else {
+        console.warn('Home image element not found');
       }
     }
 
     // ABOUT PAGE - Founders / Campus Image (on about page only)
-    if (aboutFoundersImg && window.location.pathname.includes('about.html')) {
+    var isAboutPage = window.location.pathname.includes('about.html');
+    
+    if (aboutFoundersImg && isAboutPage) {
       var aboutImageEl = document.querySelector('.intro__image');
       if (aboutImageEl) {
-        aboutImageEl.innerHTML = '<img src=\"' + escapeAttr(aboutFoundersImg.image_url) + '\" alt=\"Tesem Model Schools Founders / Campus\" style=\"width:100%;height:100%;object-fit:cover;border-radius:10px;\" />';
+        console.log('Injecting about founders image...');
+        aboutImageEl.innerHTML = '<img src="' + escapeAttr(aboutFoundersImg.image_url) + '" alt="Tesem Model Schools Founders / Campus" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" />';
+      } else {
+        console.warn('About image element not found');
       }
     }
   }

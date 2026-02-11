@@ -33,6 +33,9 @@
         <a href="#" class="sidebar__link" data-section="gallery">
           <span class="sidebar__link-icon">🖼️</span> Gallery
         </a>
+        <a href="#" class="sidebar__link" data-section="contact">
+          <span class="sidebar__link-icon">✉️</span> Contact Messages
+        </a>
 
         <p class="sidebar__nav-label">Settings</p>
         <a href="#" class="sidebar__link" data-section="settings">
@@ -86,9 +89,9 @@
               <div class="stat-card__value" id="statPublished">—</div>
             </div>
             <div class="stat-card">
-              <div class="stat-card__icon">🎓</div>
-              <div class="stat-card__label">Admission Status</div>
-              <div class="stat-card__value" id="statAdmission">—</div>
+              <div class="stat-card__icon">✉️</div>
+              <div class="stat-card__label">Contact Messages</div>
+              <div class="stat-card__value" id="statContact">—</div>
             </div>
           </div>
 
@@ -148,6 +151,28 @@
               </div>
 
               <div id="galleryGrid" class="gallery-grid"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== CONTACT MESSAGES SECTION ========== -->
+        <section class="admin-section" id="sec-contact">
+          <div class="panel">
+            <div class="panel__header">
+              <h2>Contact Form Submissions</h2>
+              <div style="display:flex;gap:10px;align-items:center;">
+                <select id="contactStatusFilter" style="padding:8px 12px;border:1px solid var(--admin-border);border-radius:6px;font-family:Poppins,sans-serif;font-size:.85rem;">
+                  <option value="all">All Messages</option>
+                  <option value="new">New</option>
+                  <option value="read">Read</option>
+                  <option value="replied">Replied</option>
+                </select>
+              </div>
+            </div>
+            <div class="panel__body">
+              <div id="contactMessagesTable" class="page-loader">
+                <div class="loading-spinner"></div>
+              </div>
             </div>
           </div>
         </section>
