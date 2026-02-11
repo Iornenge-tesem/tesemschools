@@ -168,7 +168,19 @@ document.addEventListener('DOMContentLoaded', () => {
           contactForm.reset();
           if (formSuccess) {
             formSuccess.classList.add('show');
-            setTimeout(() => formSuccess.classList.remove('show'), 5000);
+            
+            // Scroll to show success message
+            formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Hide after 8 seconds with fade effect
+            setTimeout(() => {
+              formSuccess.style.transition = 'opacity 0.5s ease';
+              formSuccess.style.opacity = '0';
+              setTimeout(() => {
+                formSuccess.classList.remove('show');
+                formSuccess.style.opacity = '1';
+              }, 500);
+            }, 8000);
           }
 
           // Re-enable button
@@ -260,6 +272,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const paragraphs = this.querySelectorAll('p');
       paragraphs.forEach(p => p.classList.toggle('expanded'));
     });
+  }
+
+  /* ----------------------------------------------------------
+     8. DYNAMIC COPYRIGHT YEAR
+     ---------------------------------------------------------- */
+  const yearElement = document.getElementById('currentYear');
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
   }
 
 });

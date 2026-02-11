@@ -32,6 +32,7 @@
   var autoTimer     = null;
   var AUTO_INTERVAL = 6000; // 6 seconds
   var isTransitioning = false;
+  var isInfiniteLoop = true; // Enable infinite loop
 
   /* ==========================================================
      1.  INITIALISE — Fetch announcements, build slides, start
@@ -133,6 +134,21 @@
       return;
     }
 
+    // Clone first and last slides for infinite loop
+    if (isInfiniteLoop && slides.length > 1) {
+      var firstClone = slides[0].cloneNode(true);
+      var lastClone = slides[slides.length - 1].cloneNode(true);
+      firstClone.classList.add('clone');
+      lastClone.classList.add('clone');
+      track.appendChild(firstClone);
+      track.insertBefore(lastClone, slides[0]);
+      
+      // Re-collect slides after cloning
+      slides = track.querySelectorAll('.hero-carousel__slide');
+      currentIndex = 1; // Start at first real slide (after last clone)
+      track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+    }
+
     // Build dots
     if (dotsWrap) {
       dotsWrap.innerHTML = '';
@@ -178,7 +194,7 @@
   function goToSlide(index, immediate) {
     if (isTransitioning && !immediate) return;
 
-    currentIndex = ((index % slides.length) + slides.length) % slides.length;
+    currentIndex = index;
 
     // Move track
     if (immediate) {
@@ -190,14 +206,18 @@
 
     track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
 
-    // Update active class on slides
+    // Update active class on slides (skip clones)
     for (var i = 0; i < slides.length; i++) {
       slides[i].classList.toggle('active', i === currentIndex);
     }
 
-    // Update dots
+    // Update dots (map to real slide index)
+    var realIndex = currentIndex - 1; // Adjust for first clone
+    if (realIndex < 0) realIndex = slides.length - 3;
+    if (realIndex >= slides.length - 2) realIndex = 0;
+    
     for (var j = 0; j < dots.length; j++) {
-      dots[j].classList.toggle('active', j === currentIndex);
+      dots[j].classList.toggle('active', j === realIndex);
     }
 
     if (immediate) {
@@ -208,7 +228,22 @@
 
     // Clear transitioning flag after animation settles
     if (!immediate) {
-      setTimeout(function () { isTransitioning = false; }, 750);
+      setTimeout(function () { 
+        isTransitioning = false;
+        
+        // Check if we're at a clone and jump to real slide
+        if (isInfiniteLoop) {
+          if (currentIndex === 0) {
+            // At last clone, jump to last real slide
+            currentIndex = slides.length - 2;
+            goToSlide(currentIndex, true);
+          } else if (currentIndex === slides.length - 1) {
+            // At first clone, jump to first real slide
+            currentIndex = 1;
+            goToSlide(currentIndex, true);
+          }
+        }
+      }, 750);
     }
   }
 

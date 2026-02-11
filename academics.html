@@ -265,17 +265,25 @@
       <div class="footer__grid">
 
 
-        <div class="footer__col">
+        <!-- Quick Links (Two Columns) -->
+        <div class="footer__col footer__col--links">
           <h4>Quick Links</h4>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="academics.html">Academics</a></li>
-            <li><a href="admissions.html">Admissions</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
+          <div class="footer__links-grid">
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="academics.html">Academics</a></li>
+            </ul>
+            <ul>
+              <li><a href="admissions.html">Admissions</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
         </div>
+      </div>
 
+      <!-- Bottom Row: Our Schools & Contact Us Side by Side -->
+      <div class="footer__bottom-row">
         <div class="footer__col">
           <h4>Our Schools</h4>
           <ul>
@@ -296,7 +304,7 @@
       </div>
 
       <div class="footer__bottom">
-        &copy; 2026 Tesem Model Schools. All rights reserved.
+        &copy; <span id="currentYear"></span> Tesem Model Schools. All rights reserved.
       </div>
     </div>
   </footer>
