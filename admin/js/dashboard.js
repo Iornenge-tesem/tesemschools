@@ -565,9 +565,14 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="gallery-item__overlay">
             <span style="position:absolute;top:8px;left:8px;background:rgba(182,39,216,.9);color:#fff;padding:4px 10px;border-radius:4px;font-size:.7rem;font-weight:500;">${escapeHTML(locationLabel)}</span>
             ${captionDisplay}
-            <button class="gallery-item__delete" onclick="deleteGalleryImage('${img.id}', '${extractFileName(img.image_url)}')" title="Delete image">
-              🗑️
-            </button>
+            <div style="position:absolute;bottom:8px;right:8px;display:flex;gap:8px;">
+              <button class="gallery-item__edit" onclick="openReplaceModal('${img.id}', '${escapeAttr(img.image_url)}', '${escapeAttr(img.caption || '')}', '${img.location}')" title="Replace image">
+                ✏️
+              </button>
+              <button class="gallery-item__delete" onclick="deleteGalleryImage('${img.id}', '${extractFileName(img.image_url)}')" title="Delete image">
+                🗑️
+              </button>
+            </div>
           </div>
         </div>
       `;
@@ -612,6 +617,105 @@ document.addEventListener('DOMContentLoaded', () => {
       return '';
     }
   }
+
+  // Open replace modal
+  window.openReplaceModal = function(id, imageUrl, caption, location) {
+    const modal = document.getElementById('replaceModal');
+    const preview = document.getElementById('replacePreview');
+    const idInput = document.getElementById('replaceImageId');
+    const urlInput = document.getElementById('replaceOldUrl');
+    const captionInput = document.getElementById('replaceCaption');
+    const locationInput = document.getElementById('replaceLocation');
+    const fileInput = document.getElementById('replaceFile');
+    
+    // Set values
+    preview.src = imageUrl;
+    idInput.value = id;
+    urlInput.value = imageUrl;
+    captionInput.value = caption;
+    locationInput.value = location;
+    fileInput.value = '';
+    
+    // Show modal
+    modal.classList.add('active');
+  };
+
+  // Close replace modal
+  window.closeReplaceModal = function() {
+    const modal = document.getElementById('replaceModal');
+    modal.classList.remove('active');
+  };
+
+  // Replace image
+  window.replaceImage = async function() {
+    const id = document.getElementById('replaceImageId').value;
+    const oldUrl = document.getElementById('replaceOldUrl').value;
+    const caption = document.getElementById('replaceCaption').value;
+    const location = document.getElementById('replaceLocation').value;
+    const fileInput = document.getElementById('replaceFile');
+    
+    if (!fileInput.files || !fileInput.files[0]) {
+      showToast('Please select a new image.', 'error');
+      return;
+    }
+
+    const file = fileInput.files[0];
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      showToast('Please select a valid image file.', 'error');
+      return;
+    }
+
+    try {
+      // Show loading state
+      showToast('Replacing image...', 'info');
+      
+      // Generate new filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+      
+      // Upload new image to storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('gallery')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL of new image
+      const { data: urlData } = supabase.storage
+        .from('gallery')
+        .getPublicUrl(fileName);
+
+      const newImageUrl = urlData.publicUrl;
+
+      // Update database record
+      const { error: updateError } = await supabase
+        .from('gallery')
+        .update({
+          image_url: newImageUrl,
+          caption: caption || null,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id);
+
+      if (updateError) throw updateError;
+
+      // Delete old image from storage
+      const oldFileName = extractFileName(oldUrl);
+      if (oldFileName) {
+        await supabase.storage.from('gallery').remove([oldFileName]);
+      }
+
+      showToast('✅ Image replaced successfully!');
+      closeReplaceModal();
+      loadGallery();
+      loadDashboardStats();
+    } catch (err) {
+      console.error('Replace error:', err);
+      showToast('Failed to replace image: ' + err.message, 'error');
+    }
+  };
 
   /* ==========================================================
      SITE SETTINGS — Toggle Admission, Resumption Date

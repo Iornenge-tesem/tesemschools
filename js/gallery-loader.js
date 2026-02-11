@@ -72,26 +72,40 @@
                      window.location.pathname.endsWith('/index.html') ||
                      window.location.pathname === '';
     
-    if (homeSchoolImg && isHomePage) {
+    if (isHomePage) {
       var homeImageEl = document.querySelector('.intro__image');
-      if (homeImageEl) {
+      var introSection = document.getElementById('intro');
+      
+      if (homeSchoolImg && homeImageEl) {
         console.log('Injecting home school image...');
         homeImageEl.innerHTML = '<img src="' + escapeAttr(homeSchoolImg.image_url) + '" alt="Tesem Model Schools Building" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" />';
+        if (introSection) introSection.style.display = '';
       } else {
-        console.warn('Home image element not found');
+        // No image - hide the entire section
+        if (introSection) {
+          introSection.style.display = 'none';
+          console.log('Home intro section hidden - no image uploaded');
+        }
       }
     }
 
     // ABOUT PAGE - Founders / Campus Image (on about page only)
     var isAboutPage = window.location.pathname.includes('about.html');
     
-    if (aboutFoundersImg && isAboutPage) {
+    if (isAboutPage) {
       var aboutImageEl = document.querySelector('.intro__image');
-      if (aboutImageEl) {
+      var historySection = document.getElementById('history');
+      
+      if (aboutFoundersImg && aboutImageEl) {
         console.log('Injecting about founders image...');
         aboutImageEl.innerHTML = '<img src="' + escapeAttr(aboutFoundersImg.image_url) + '" alt="Tesem Model Schools Founders / Campus" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" />';
+        if (historySection) historySection.style.display = '';
       } else {
-        console.warn('About image element not found');
+        // No image - hide the entire section
+        if (historySection) {
+          historySection.style.display = 'none';
+          console.log('About history section hidden - no image uploaded');
+        }
       }
     }
   }

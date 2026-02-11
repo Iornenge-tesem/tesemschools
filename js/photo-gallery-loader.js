@@ -46,7 +46,7 @@
     sb.from('gallery')
       .select('*')
       .eq('location', 'gallery')
-      .order('created_at', { ascending: false })
+      .order('created_at', { ascending: true })
       .then(function (response) {
         var data = response.data;
         var error = response.error;
@@ -70,26 +70,74 @@
   }
 
   /* ---------- Display Gallery Images ---------- */
+  var carouselIndex = 0;
+  
   function displayGallery(images) {
-    galleryImages = images; // Store for lightbox navigation
+    galleryImages = images; // Store for lightbox and carousel navigation
     
-    var html = images.map(function (img, index) {
+    if (images.length === 0) return;
+    
+    // Build carousel HTML
+    var slidesHtml = images.map(function (img, index) {
       var caption = img.caption && img.caption.trim() !== '' 
         ? escapeHTML(img.caption)
-        : '<span class="gallery-item__caption--empty">No caption</span>';
-
-      return '<div class="gallery-item" data-index="' + index + '" onclick="openLightbox(' + index + ')" style="cursor:pointer;">' +
-        '<img src="' + escapeAttr(img.image_url) + '" alt="' + escapeAttr(img.caption || 'Gallery image') + '" class="gallery-item__image" />' +
-        '<div class="gallery-item__caption">' +
+        : 'No caption';
+      
+      var activeClass = index === 0 ? 'active' : '';
+      
+      return '<div class="carousel-slide ' + activeClass + '" data-index="' + index + '">' +
+        '<img src="' + escapeAttr(img.image_url) + '" alt="' + escapeAttr(caption) + '" class="carousel-slide__image" onclick="openLightbox(' + index + ')" />' +
+        '<div class="carousel-slide__caption">' +
           '<p>' + caption + '</p>' +
         '</div>' +
       '</div>';
     }).join('');
-
-    galleryContainer.innerHTML = html;
+    
+    // Build dots HTML
+    var dotsHtml = images.map(function (img, index) {
+      var activeClass = index === 0 ? 'active' : '';
+      return '<span class="carousel-dot ' + activeClass + '" onclick="goToSlide(' + index + ')" data-index="' + index + '"></span>';
+    }).join('');
+    
+    // Inject carousel structure
+    galleryContainer.innerHTML = 
+      '<div class="photo-carousel">' +
+        '<button class="carousel-nav carousel-nav--prev" onclick="changeSlide(-1)" aria-label="Previous">‹</button>' +
+        '<div class="carousel-track">' + slidesHtml + '</div>' +
+        '<button class="carousel-nav carousel-nav--next" onclick="changeSlide(1)" aria-label="Next">›</button>' +
+      '</div>' +
+      '<div class="carousel-dots">' + dotsHtml + '</div>';
     
     // Setup lightbox if elements exist
     setupLightbox();
+  }
+  
+  /* ---------- Carousel Navigation ---------- */
+  window.changeSlide = function(direction) {
+    carouselIndex += direction;
+    
+    if (carouselIndex < 0) carouselIndex = galleryImages.length - 1;
+    if (carouselIndex >= galleryImages.length) carouselIndex = 0;
+    
+    updateCarousel();
+  };
+  
+  window.goToSlide = function(index) {
+    carouselIndex = index;
+    updateCarousel();
+  };
+  
+  function updateCarousel() {
+    var slides = document.querySelectorAll('.carousel-slide');
+    var dots = document.querySelectorAll('.carousel-dot');
+    
+    slides.forEach(function(slide, index) {
+      slide.classList.toggle('active', index === carouselIndex);
+    });
+    
+    dots.forEach(function(dot, index) {
+      dot.classList.toggle('active', index === carouselIndex);
+    });
   }
 
   /* ---------- Lightbox Functions ---------- */
@@ -164,11 +212,12 @@
 
   /* ---------- Show Empty State ---------- */
   function showEmpty() {
-    galleryContainer.innerHTML = 
-      '<div class="photo-gallery__loader">' +
-        '<p style="font-size:1.1rem;color:var(--text-secondary);">📷</p>' +
-        '<p>No gallery images yet. Check back soon!</p>' +
-      '</div>';
+    // Hide the entire gallery section if no images
+    var gallerySection = document.getElementById('gallery');
+    if (gallerySection) {
+      gallerySection.style.display = 'none';
+      console.log('Photo gallery section hidden - no images uploaded');
+    }
   }
 
   /* ---------- Show Error State ---------- */
