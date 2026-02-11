@@ -149,8 +149,14 @@
                 <select id="uploadLocation" style="padding:8px 12px;border:1px solid var(--admin-border);border-radius:6px;font-family:Poppins,sans-serif;font-size:.85rem;margin-top:6px;width:100%;max-width:400px;">
                   <option value="home_school">Home Page - School Building Image</option>
                   <option value="about_founders">About Page - Founders / Campus Image</option>
-                  <option value="gallery">General Gallery (not displayed on pages)</option>
+                  <option value="gallery">General Gallery (About Page Photo Gallery)</option>
                 </select>
+              </div>
+
+              <!-- Caption input for gallery images -->
+              <div style="margin-bottom:20px;" id="captionContainer">
+                <label for="imageCaption" style="font-size:.82rem;font-weight:500;">Caption / Description <span style="font-weight:400;color:#9ca3af;">(e.g., "Proprietor", "Staff Team", "Students at Assembly")</span></label>
+                <input type="text" id="imageCaption" placeholder="Enter a description for this image..." style="padding:10px 14px;border:1px solid var(--admin-border);border-radius:6px;font-family:Poppins,sans-serif;font-size:.85rem;margin-top:6px;width:100%;max-width:600px;" />
               </div>
 
               <div id="galleryGrid" class="gallery-grid"></div>

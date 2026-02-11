@@ -459,6 +459,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Show/hide caption field based on location
+  const uploadLocation = document.getElementById('uploadLocation');
+  const captionContainer = document.getElementById('captionContainer');
+  
+  if (uploadLocation && captionContainer) {
+    // Initially show caption only for gallery location
+    const toggleCaptionField = () => {
+      const isGallery = uploadLocation.value === 'gallery';
+      captionContainer.style.display = isGallery ? 'block' : 'none';
+    };
+    
+    toggleCaptionField(); // Set initial state
+    uploadLocation.addEventListener('change', toggleCaptionField);
+  }
+
   async function handleFileUpload(file) {
     // Validate file
     const allowed = ['image/jpeg', 'image/png', 'image/webp'];
@@ -473,6 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const location = document.getElementById('uploadLocation')?.value || 'gallery';
+    const caption = document.getElementById('imageCaption')?.value || '';
     const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
 
     showToast('Uploading image…', 'warning');
@@ -492,10 +508,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const imageUrl = urlData.publicUrl;
 
-      // Insert record into gallery table
+      // Insert record into gallery table with caption
       const { error: dbError } = await supabase
         .from('gallery')
-        .insert([{ image_url: imageUrl, location: location }]);
+        .insert([{ image_url: imageUrl, location: location, caption: caption }]);
 
       if (dbError) throw dbError;
 
@@ -506,8 +522,10 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast(err.message || 'Upload failed.', 'error');
     }
 
-    // Reset file input
+    // Reset file input and caption
     if (galleryFileInput) galleryFileInput.value = '';
+    const captionInput = document.getElementById('imageCaption');
+    if (captionInput) captionInput.value = '';
   }
 
   // Load gallery images
@@ -537,11 +555,16 @@ document.addEventListener('DOMContentLoaded', () => {
           'gallery': 'General Gallery'
         }[img.location] || img.location || 'Gallery';
         
+        const captionDisplay = img.caption && img.caption.trim() !== ''
+          ? `<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);color:#fff;padding:8px;font-size:.75rem;">${escapeHTML(img.caption)}</div>`
+          : '';
+        
         return `
         <div class="gallery-item">
-          <img src="${escapeHTML(img.image_url)}" alt="${escapeHTML(locationLabel)}" loading="lazy" />
+          <img src="${escapeHTML(img.image_url)}" alt="${escapeHTML(img.caption || locationLabel)}" loading="lazy" />
           <div class="gallery-item__overlay">
             <span style="position:absolute;top:8px;left:8px;background:rgba(182,39,216,.9);color:#fff;padding:4px 10px;border-radius:4px;font-size:.7rem;font-weight:500;">${escapeHTML(locationLabel)}</span>
+            ${captionDisplay}
             <button class="gallery-item__delete" onclick="deleteGalleryImage('${img.id}', '${extractFileName(img.image_url)}')" title="Delete image">
               🗑️
             </button>

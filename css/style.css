@@ -960,6 +960,65 @@ button {
   line-height: 1.8;
 }
 
+/* Photo Gallery Grid */
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.photo-gallery__loader {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+}
+
+.photo-gallery__loader .loading-spinner {
+  margin: 0 auto 16px;
+}
+
+.gallery-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+  transition: all var(--transition);
+  cursor: pointer;
+}
+
+.gallery-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+}
+
+.gallery-item__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-item__caption {
+  padding: 16px;
+  background: var(--white);
+}
+
+.gallery-item__caption p {
+  font-size: .9rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.gallery-item__caption--empty {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
 /* ============================================================
    ACADEMICS PAGE
    ============================================================ */
@@ -1585,7 +1644,7 @@ button {
   }
 
   .footer__bottom-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
     padding: 20px 0;
   }
@@ -1841,6 +1900,16 @@ button {
   .map-placeholder {
     height: 280px;
     margin-top: 30px;
+  }
+
+  /* Photo Gallery - responsive grid */
+  .photo-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+  }
+
+  .gallery-item__caption p {
+    font-size: .8rem;
   }
 }
 
