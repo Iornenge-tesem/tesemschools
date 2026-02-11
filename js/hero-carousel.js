@@ -149,10 +149,11 @@
       track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
     }
 
-    // Build dots
+    // Build dots (only for real slides, excluding clones)
     if (dotsWrap) {
       dotsWrap.innerHTML = '';
-      for (var i = 0; i < slides.length; i++) {
+      var numRealSlides = isInfiniteLoop ? slides.length - 2 : slides.length;
+      for (var i = 0; i < numRealSlides; i++) {
         var dot = document.createElement('button');
         dot.className = 'hero-carousel__dot' + (i === 0 ? ' active' : '');
         dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
@@ -211,13 +212,19 @@
       slides[i].classList.toggle('active', i === currentIndex);
     }
 
-    // Update dots (map to real slide index)
-    var realIndex = currentIndex - 1; // Adjust for first clone
-    if (realIndex < 0) realIndex = slides.length - 3;
-    if (realIndex >= slides.length - 2) realIndex = 0;
-    
-    for (var j = 0; j < dots.length; j++) {
-      dots[j].classList.toggle('active', j === realIndex);
+    // Update dots (map current slide index to dot index)
+    if (dots.length > 0) {
+      // For infinite loop, subtract 1 to get dot index (account for first clone)
+      // For non-infinite, use currentIndex directly
+      var dotIndex = isInfiniteLoop ? currentIndex - 1 : currentIndex;
+      
+      // Wrap around for clones
+      if (dotIndex < 0) dotIndex = dots.length - 1;
+      if (dotIndex >= dots.length) dotIndex = 0;
+      
+      for (var j = 0; j < dots.length; j++) {
+        dots[j].classList.toggle('active', j === dotIndex);
+      }
     }
 
     if (immediate) {
@@ -258,9 +265,11 @@
   }
 
   function onDotClick(e) {
-    var idx = parseInt(e.currentTarget.dataset.index, 10);
-    if (!isNaN(idx)) {
-      goToSlide(idx);
+    var dotIdx = parseInt(e.currentTarget.dataset.index, 10);
+    if (!isNaN(dotIdx)) {
+      // Map dot index to actual slide index (add 1 for first clone if infinite loop)
+      var slideIdx = isInfiniteLoop ? dotIdx + 1 : dotIdx;
+      goToSlide(slideIdx);
       resetAuto();
     }
   }

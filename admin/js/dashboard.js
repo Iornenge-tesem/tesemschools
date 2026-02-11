@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     dashboard:     { title: 'Dashboard',     subtitle: 'Overview of your school system' },
     announcements: { title: 'Announcements', subtitle: 'Manage school announcements' },
     gallery:       { title: 'Gallery',        subtitle: 'Upload and manage images' },
+    'hero-backgrounds': { title: 'Hero Backgrounds', subtitle: 'Manage page hero section backgrounds' },
     contact:       { title: 'Contact Messages', subtitle: 'View and manage contact form submissions' },
     settings:      { title: 'Site Settings',  subtitle: 'Configure website options' },
   };
@@ -908,6 +909,167 @@ Actions:
   }
 
   /* ==========================================================
+     HERO BACKGROUNDS — CRUD
+     ========================================================== */
+  async function loadHeroBackgrounds() {
+    const container = document.getElementById('heroBackgroundsGrid');
+    if (!container) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('hero_backgrounds')
+        .select('*')
+        .order('page_name', { ascending: true });
+
+      if (error) throw error;
+
+      const pages = data && data.length > 0 ? data : [
+        { page_name: 'about', image_url: null, is_active: true },
+        { page_name: 'academics', image_url: null, is_active: true },
+        { page_name: 'admissions', image_url: null, is_active: true },
+        { page_name: 'contact', image_url: null, is_active: true }
+      ];
+
+      const pageLabels = {
+        about: 'About Us',
+        academics: 'Academics',
+        admissions: 'Admissions',
+        contact: 'Contact Us'
+      };
+
+      container.innerHTML = pages.map(page => `
+        <div class="hero-bg-card">
+          <div class="hero-bg-card__preview" style="background-image: ${page.image_url ? `url('${escapeHTML(page.image_url)}')` : 'linear-gradient(135deg, #b627d8 0%, #8b1fa8 100%)'}">
+            ${!page.image_url ? '<div class="hero-bg-card__preview-text">Default Gradient</div>' : ''}
+          </div>
+          <div class="hero-bg-card__info">
+            <h3>${pageLabels[page.page_name] || page.page_name}</h3>
+            <p>${page.image_url ? 'Custom background active' : 'Using default gradient'}</p>
+          </div>
+          <div class="hero-bg-card__actions">
+            <label class="admin-btn admin-btn--primary" style="cursor:pointer;margin:0;">
+              ${page.image_url ? '🔄 Change' : '➕ Upload'}
+              <input type="file" accept="image/*" style="display:none;" onchange="handleHeroImageUpload(event, '${page.page_name}')" />
+            </label>
+            ${page.image_url ? `<button class="admin-btn admin-btn--danger" onclick="removeHeroBackground('${page.page_name}')">🗑️ Remove</button>` : ''}
+          </div>
+        </div>
+      `).join('');
+
+    } catch (err) {
+      console.error('Error loading hero backgrounds:', err);
+      container.innerHTML = `<p style="color:#ef4444;">Failed to load hero backgrounds: ${escapeHTML(err.message)}</p>`;
+    }
+  }
+
+  // Expose functions to global scope for onclick handlers
+  window.handleHeroImageUpload = async function(event, pageName) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      showToast('Please upload an image file', 'error');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('Image size must be less than 5MB', 'error');
+      return;
+    }
+
+    try {
+      showToast('Uploading...', 'warning');
+
+      // Upload to Supabase Storage
+      const fileExt = file.name.split('.').pop();
+      const fileName = `pages/${pageName}-${Date.now()}.${fileExt}`;
+      
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('hero-images')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('hero-images')
+        .getPublicUrl(fileName);
+
+      const imageUrl = urlData.publicUrl;
+
+      // Update database
+      const { error: upsertError } = await supabase
+        .from('hero_backgrounds')
+        .upsert({
+          page_name: pageName,
+          image_url: imageUrl,
+          is_active: true,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'page_name'
+        });
+
+      if (upsertError) throw upsertError;
+
+      showToast('Hero background updated successfully', 'success');
+      loadHeroBackgrounds();
+    } catch (err) {
+      console.error('Upload error:', err);
+      showToast('Failed to upload image: ' + err.message, 'error');
+    }
+
+    // Reset file input
+    event.target.value = '';
+  };
+
+  window.removeHeroBackground = async function(pageName) {
+    if (!confirm('Remove this hero background? The page will use the default gradient.')) return;
+
+    try {
+      // Get current image URL to delete from storage
+      const { data: currentData } = await supabase
+        .from('hero_backgrounds')
+        .select('image_url')
+        .eq('page_name', pageName)
+        .single();
+
+      // Update database to remove image_url
+      const { error: updateError } = await supabase
+        .from('hero_backgrounds')
+        .update({
+          image_url: null,
+          updated_at: new Date().toISOString()
+        })
+        .eq('page_name', pageName);
+
+      if (updateError) throw updateError;
+
+      // Delete image from storage if it exists
+      if (currentData && currentData.image_url) {
+        try {
+          const urlPath = new URL(currentData.image_url).pathname;
+          const fileName = urlPath.split('/hero-images/').pop();
+          if (fileName) {
+            await supabase.storage
+              .from('hero-images')
+              .remove([fileName]);
+          }
+        } catch (storageErr) {
+          console.warn('Failed to delete old image from storage:', storageErr);
+        }
+      }
+
+      showToast('Hero background removed', 'success');
+      loadHeroBackgrounds();
+    } catch (err) {
+      console.error('Error removing hero background:', err);
+      showToast('Failed to remove background: ' + err.message, 'error');
+    }
+  };
+
+  /* ==========================================================
      UTILITY: Escape HTML to prevent XSS
      ========================================================== */
   function escapeHTML(str) {
@@ -944,6 +1106,7 @@ Actions:
     loadRecentAnnouncements();
     loadAnnouncements();
     loadGallery();
+    loadHeroBackgrounds();
     loadContactMessages();
     loadSettings();
   }
