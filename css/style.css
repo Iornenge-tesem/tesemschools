@@ -340,7 +340,10 @@ button {
 
 /* Default hero slide — uses brand gradient */
 .hero-carousel__slide--default {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background:
+    linear-gradient(to bottom, rgba(27, 16, 34, .58) 0%, rgba(27, 16, 34, .72) 100%),
+    url('../images/first modal background.jpg') center/cover no-repeat;
+  background-color: #1b1022;
 }
 
 /* Text-only announcement slide — uses brand gradient */
